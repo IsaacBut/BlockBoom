@@ -1,0 +1,13 @@
+Game Basic,Value,,,GameObject ,Code,Path,,,,
+,,,,,,,,,,
+playerMoveSpeed,10,NonUse,,Normal block,N,Prefabs/Block,,,,
+bulletMoveSpeed,25,,,Boom block,B,Prefabs/Boom,,,,
+bullet¢ÛaxAmount,50,,,Wall block,W,Prefabs/Wall,,,,
+flameSpreadSpeed,100,,,Wall Boom block,WB,Prefabs/WallBoom,,,,
+,,,,Can Break Wall block,CBW,Prefabs/CanBreakBoom,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,End

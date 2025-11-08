@@ -1,0 +1,767 @@
+fileFormatVersion: 2
+guid: a2bdb3c30cdcf2c4cb58c045d80d18b3
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6688010909989908319
+    second: GameTitle_TitleLogo_Png_0
+  - first:
+      213: -526429936342125517
+    second: GameTitle_TitleLogo_Png_1
+  - first:
+      213: -3128142088497725381
+    second: GameTitle_TitleLogo_Png_2
+  - first:
+      213: 5702658646579975137
+    second: GameTitle_TitleLogo_Png_3
+  - first:
+      213: 6096559449257330150
+    second: GameTitle_TitleLogo_Png_4
+  - first:
+      213: -4347222979037954148
+    second: GameTitle_TitleLogo_Png_5
+  - first:
+      213: 7931445357650857696
+    second: GameTitle_TitleLogo_Png_6
+  - first:
+      213: 570406296857666444
+    second: GameTitle_TitleLogo_Png_7
+  - first:
+      213: -2434122984123710565
+    second: GameTitle_TitleLogo_Png_8
+  - first:
+      213: -8427545251059149790
+    second: GameTitle_TitleLogo_Png_9
+  - first:
+      213: -965222027972095267
+    second: GameTitle_TitleLogo_Png_10
+  - first:
+      213: -1040164179561969990
+    second: GameTitle_TitleLogo_Png_11
+  - first:
+      213: -1008570570675169670
+    second: GameTitle_TitleLogo_Png_12
+  - first:
+      213: 7239386069727812823
+    second: GameTitle_TitleLogo_Png_13
+  - first:
+      213: 5699114070456474002
+    second: GameTitle_TitleLogo_Png_14
+  - first:
+      213: -6012754012932564873
+    second: GameTitle_TitleLogo_Png_15
+  - first:
+      213: -9090136162278414004
+    second: GameTitle_TitleLogo_Png_16
+  - first:
+      213: -7795337467120149479
+    second: GameTitle_TitleLogo_Png_17
+  - first:
+      213: 3880421601188681790
+    second: GameTitle_TitleLogo_Png_18
+  - first:
+      213: 8370134720439634184
+    second: GameTitle_TitleLogo_Png_19
+  - first:
+      213: -6676574408289421914
+    second: GameTitle_TitleLogo_Png_20
+  - first:
+      213: 816670855632151309
+    second: GameTitle_TitleLogo_Png_21
+  - first:
+      213: -1968316930898444071
+    second: GameTitle_TitleLogo_Png_22
+  - first:
+      213: 1483555957319660845
+    second: GameTitle_TitleLogo_Png_23
+  - first:
+      213: -7285179005413922740
+    second: GameTitle_TitleLogo_Png_24
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_0
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 19
+        width: 594
+        height: 509
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a05d1013896f23a0800000000000000
+      internalID: -6688010909989908319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_1
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 427
+        width: 76
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 334323513ceb1b8f0800000000000000
+      internalID: -526429936342125517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_2
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 399
+        width: 37
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b300528185b9694d0800000000000000
+      internalID: -3128142088497725381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_3
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 397
+        width: 34
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e395b833d9e32f40800000000000000
+      internalID: 5702658646579975137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_4
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 431
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e5c805a4845b9450800000000000000
+      internalID: 6096559449257330150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_5
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 277
+        width: 135
+        height: 239
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9ff60fabbf8ba3c0800000000000000
+      internalID: -4347222979037954148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_6
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 349
+        width: 37
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ee433ab787221e60800000000000000
+      internalID: 7931445357650857696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_7
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 287
+        width: 87
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c83e8dd318d7ae700800000000000000
+      internalID: 570406296857666444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_8
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 287
+        width: 102
+        height: 127
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9341bfda02483ed0800000000000000
+      internalID: -2434122984123710565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_9
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 338
+        width: 34
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 224d616ce385b0b80800000000000000
+      internalID: -8427545251059149790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_10
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 304
+        width: 20
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd25755fda7da92f0800000000000000
+      internalID: -965222027972095267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_11
+      rect:
+        serializedVersion: 2
+        x: 533
+        y: 293
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab68f1190389091f0800000000000000
+      internalID: -1040164179561969990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_12
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 153
+        width: 85
+        height: 131
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a765efbd866d002f0800000000000000
+      internalID: -1008570570675169670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_13
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 152
+        width: 89
+        height: 133
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dc99064647777460800000000000000
+      internalID: 7239386069727812823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_14
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 254
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2991df74d02571f40800000000000000
+      internalID: 5699114070456474002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_15
+      rect:
+        serializedVersion: 2
+        x: 471
+        y: 154
+        width: 86
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 778995905186e8ca0800000000000000
+      internalID: -6012754012932564873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_16
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 198
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c49667f625959d180800000000000000
+      internalID: -9090136162278414004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_17
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 154
+        width: 115
+        height: 99
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91c920800e561d390800000000000000
+      internalID: -7795337467120149479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_18
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 156
+        width: 82
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e389a9d03e60ad530800000000000000
+      internalID: 3880421601188681790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_19
+      rect:
+        serializedVersion: 2
+        x: 564
+        y: 207
+        width: 38
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 809c7fd6e21b82470800000000000000
+      internalID: 8370134720439634184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_20
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 49
+        width: 82
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a5f17d13fa0853a0800000000000000
+      internalID: -6676574408289421914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_21
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 101
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d036e58f0d5655b00800000000000000
+      internalID: 816670855632151309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_22
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 23
+        width: 34
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d049601e222fa4e0800000000000000
+      internalID: -1968316930898444071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_23
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 102
+        width: 47
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d25f3707846a69410800000000000000
+      internalID: 1483555957319660845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameTitle_TitleLogo_Png_24
+      rect:
+        serializedVersion: 2
+        x: 494
+        y: 23
+        width: 28
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c486b290b48d5ea90800000000000000
+      internalID: -7285179005413922740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 0f04fb9c2757424418fb5d9f77227cfc
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      GameTitle_TitleLogo_Png_0: -6688010909989908319
+      GameTitle_TitleLogo_Png_1: -526429936342125517
+      GameTitle_TitleLogo_Png_10: -965222027972095267
+      GameTitle_TitleLogo_Png_11: -1040164179561969990
+      GameTitle_TitleLogo_Png_12: -1008570570675169670
+      GameTitle_TitleLogo_Png_13: 7239386069727812823
+      GameTitle_TitleLogo_Png_14: 5699114070456474002
+      GameTitle_TitleLogo_Png_15: -6012754012932564873
+      GameTitle_TitleLogo_Png_16: -9090136162278414004
+      GameTitle_TitleLogo_Png_17: -7795337467120149479
+      GameTitle_TitleLogo_Png_18: 3880421601188681790
+      GameTitle_TitleLogo_Png_19: 8370134720439634184
+      GameTitle_TitleLogo_Png_2: -3128142088497725381
+      GameTitle_TitleLogo_Png_20: -6676574408289421914
+      GameTitle_TitleLogo_Png_21: 816670855632151309
+      GameTitle_TitleLogo_Png_22: -1968316930898444071
+      GameTitle_TitleLogo_Png_23: 1483555957319660845
+      GameTitle_TitleLogo_Png_24: -7285179005413922740
+      GameTitle_TitleLogo_Png_3: 5702658646579975137
+      GameTitle_TitleLogo_Png_4: 6096559449257330150
+      GameTitle_TitleLogo_Png_5: -4347222979037954148
+      GameTitle_TitleLogo_Png_6: 7931445357650857696
+      GameTitle_TitleLogo_Png_7: 570406296857666444
+      GameTitle_TitleLogo_Png_8: -2434122984123710565
+      GameTitle_TitleLogo_Png_9: -8427545251059149790
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
