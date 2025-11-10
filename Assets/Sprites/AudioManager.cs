@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class AudioManager : MonoBehaviour
 {
@@ -39,7 +41,7 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     /// <param name="name"></param>
     /// <param name="path"></param>
-    public void ChangeCrip(string name, string path)
+    public void ChangeCrip(string name, string cripName)
     {
         // 在 musicSounds 数组里查名字
         Sound s = Array.Find(musicSounds, x => x.name == name);
@@ -50,30 +52,40 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        // 从 Resources 里加载
-        AudioClip clip = Resources.Load<AudioClip>(path);
+        if (!cripName.EndsWith(".mp3"))cripName += ".mp3";
+        string path = Path.Combine(Application.streamingAssetsPath, "StageMusic", cripName);
 
-        if (clip == null)
+        StartCoroutine(LoadAudioAndSet(s, path));
+    }
+
+    IEnumerator LoadAudioAndSet(Sound s, string path)
+    {
+        UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.MPEG);
+        req.disposeDownloadHandlerOnDispose = false;
+
+        yield return req.SendWebRequest();
+
+        if (req.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogWarning($"[ChangeClip] AudioClip not found at path: Resources/{path}");
-            return;
+            Debug.LogError($"[ChangeClip] Failed to load clip: {path}\n{req.error}");
+            yield break;
         }
 
-        // 替换音频
-        s.clip = clip;
+        AudioClip clip = DownloadHandlerAudioClip.GetContent(req);
+
+        clip.hideFlags = HideFlags.DontUnloadUnusedAsset;
+
+        s.clip = clip;  // ✅ 正确赋值
+        Debug.Log($"[ChangeClip] Loaded and changed BGM: {clip.name}");
     }
 
     public float CripLenght(string name)
     {
         Sound s = Array.Find(musicSounds, x => x.name == name);
+        if (s == null || s.clip == null)
+            return 0f; // ✅ 防止访问销毁后 clip
 
-        if (s == null)
-        {
-            Debug.LogWarning("Sound not found: " + name);
-            return 0f;
-        }
-
-        return s.clip.length; // ✅ 返回音频时长（单位：秒）
+        return s.clip.length;
     }
 
 

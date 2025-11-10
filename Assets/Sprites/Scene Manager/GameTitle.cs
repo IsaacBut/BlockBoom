@@ -27,9 +27,15 @@ public class GameTitle : MonoBehaviour
 
     private void Start()
     {
-
         nameInput.SetActive(false);
+    }
 
+    private void Update()
+    {
+        if(Input.GetKeyUp(KeyCode.O))
+        {
+            inputField.ForceLabelUpdate();
+        }
     }
 
 
@@ -54,18 +60,20 @@ public class GameTitle : MonoBehaviour
 
     public void PlayerNameInPutButton()
     {
-        string playerName = inputField.text; 
-        Debug.Log("当前输入内容是：[" + playerName + "]");
 
-        if (string.IsNullOrEmpty(playerName)) return;
-        Debug.Log("玩家输入的名字是：" + playerName);
+        inputField.ForceLabelUpdate(); // ✅ 强制刷新文本
+        string playerName = inputField.text; // 此时日文已经确认
+
+        Debug.Log("玩家名字：" + playerName);
+
+        if (string.IsNullOrWhiteSpace(playerName)) return;
+
         GameManager.instance.PlayerInit(playerName);
         inputField.text = "";
         SceneManager.LoadScene("LevelSelect", LoadSceneMode.Single);
 
     }
 
-    //public void ReSetRankButton() => GameManager.instance.ResetRank();
-
+ 
 
 }

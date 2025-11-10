@@ -166,10 +166,13 @@ public class Manager : MonoBehaviour
                 float posX = GameData.Width(x - 3);
                 float posY = GameData.Height(y - 3);
 
+
                 if (x == 4 || x == row - 1 || y == 4 || y == col - 1)
                 {
                     areaLimit.Add(new Vector2(posX, posY));
                 }
+
+
 
                 string targetCode = CSVReader.instance.ReadTargetCellString(GameData.levelStage, CSVReader.instance.IndexToColumnName(x), y);
 
@@ -224,8 +227,6 @@ public class Manager : MonoBehaviour
 
                     target.transform.SetParent(parent.transform);
 
-
-
                 }
             }
 
@@ -275,17 +276,26 @@ public class Manager : MonoBehaviour
     #endregion
 
     #region Music
-    public float timer;
+    private float timer;
+    private float gameMusicLenght;
+
 
     bool isReady;
 
-    private IEnumerator MusicInit()
+    private void MusicInit()
     {
-        if (!AudioManager.instance.IsPlaying()) AudioManager.instance.PlayMusic(ready_Bgm, 1);
+        AudioManager.instance.ChangeCrip(inGame_Bgm,CSVReader.instance.ReadTargetCellString(GameData.levelStage, "B", 14));
+        gameMusicLenght = AudioManager.instance.CripLenght(inGame_Bgm);
+        Debug.Log(gameMusicLenght);
+    }
 
-        isReady = true;
+    private IEnumerator Ready()
+    {
+        //if (!AudioManager.instance.IsPlaying()) AudioManager.instance.PlayMusic(ready_Bgm, 1);
+
+        //isReady = true;
         yield return new WaitForSeconds(1f);
-        AudioManager.instance.CripLenght(inGame_Bgm);
+        AudioManager.instance.PlayMusic(inGame_Bgm,100);
         isGameStart = true;
     }
 
@@ -299,10 +309,12 @@ public class Manager : MonoBehaviour
     bool IsAllBlockGone() => canBrakeGameObject.Count == 0;
     bool IsNoBullet() => Player.instance.nowBulletAmount <= 0;
 
+    bool IsMusicDone() => timer >= gameMusicLenght;
+
     bool IsGameSet()
     {
         return IsAllBlockGone()|| IsNoBullet();
-            //|| (isGameStart && !AudioManager.instance.IsPlaying());
+        //|| IsMusicDone();
     }
 
     void GameSet()
@@ -310,7 +322,7 @@ public class Manager : MonoBehaviour
         GameManager.instance.pastScoreFromInGame = nowPoint;
         if (IsAllBlockGone()) SceneManager.LoadScene("GameClear", LoadSceneMode.Single);
         else if (IsNoBullet() && !IsAllBlockGone()) SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
-
+        // else if (IsMusicDone() && !IsAllBlockGone()) SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
         else { SceneManager.LoadScene("GameOver", LoadSceneMode.Single); }
     }
 
@@ -340,12 +352,16 @@ public class Manager : MonoBehaviour
         StartCoroutine(WallInit());
         nowPoint = 0;
 
+        MusicInit();
+
         Player.instance.PlayerInit();
         //if (!AudioManager.instance.IsPlaying()) AudioManager.instance.PlayMusic("InGame_Bgm", 1);
         //Test
         //if (!AudioManager.instance.IsPlaying()) AudioManager.instance.PlayMusic("Moonlight", 1);
         playerMoveTest.RoadInit();
-        isGameStart = true;
+
+
+        StartCoroutine(Ready());
     }
 
     private void Update()

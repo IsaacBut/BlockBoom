@@ -31,8 +31,9 @@ public class Player : MonoBehaviour
         float playerPosY = playerAreaCenter.y - (Player.instance.gameObject.GetComponent<BoxCollider2D>().bounds.extents.y / 2);
         Player.instance.gameObject.transform.position = new Vector2(Player.instance.gameObject.transform.position.x, playerPosY);
         */
-        moveTime = 0.5f;
-        //moveTime = CSVReader.instance.ReadTargetCellIndex(GameData.levelStage, "A", 1) / 60;
+
+        moveTime = 60 / CSVReader.instance.ReadTargetCellIndex(GameData.levelStage, "B", 13);
+
         Debug.Log(nowBulletAmount);
         StartCoroutine(MoveThroughPointsLoop());
     }

@@ -145,7 +145,7 @@ namespace Data
 
             distance = Vector3.Distance(worldCorners[1], worldCorners[2]);
             //distance = Mathf.Sqrt(posX * posX + posY * posY);
-            flameMaxRadius = distance;
+            flameMaxRadius = distance * 2;
 
             CaluBlockSize();
         }

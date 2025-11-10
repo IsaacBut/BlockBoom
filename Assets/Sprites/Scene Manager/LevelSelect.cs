@@ -20,7 +20,13 @@ public class LevelSelect : MonoBehaviour
         SceneManager.LoadScene("InGame", LoadSceneMode.Single);
 
     }
+    public void Button_Leve0_00()
+    {
+        GameManager.instance.level = 0;
+        GameManager.instance.stage = 0;
+        SceneManager.LoadScene("InGame", LoadSceneMode.Single);
 
+    }
     public void Button_Level_02()
     {
         GameManager.instance.level = 2;
