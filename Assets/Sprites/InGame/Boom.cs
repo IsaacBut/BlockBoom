@@ -13,8 +13,9 @@ public class Boom : MonoBehaviour
 
     public List<GameObject> flameCanBrakeBlock = new List<GameObject>();
 
-    bool isFound = false;
+    public bool isFound = false;
     int flameCanBrakeBlockNum = 0;
+    float eps = 0.001f;
 
 #if UNITY_EDITOR
 
@@ -84,7 +85,10 @@ public class Boom : MonoBehaviour
         //By Diection
         for (int i = 0; i < Manager.instance.areaLimit.Count; i++)
         {
-            RaycastHit2D[] hits = Physics2D.RaycastAll(laserStart, Manager.instance.areaLimit[i], GameData.distance);
+            if ((laserStart - Manager.instance.areaLimit[i]).sqrMagnitude <= eps * eps) continue;
+
+            Vector2 dir = (Manager.instance.areaLimit[i] - laserStart).normalized;
+            RaycastHit2D[] hits = Physics2D.RaycastAll(laserStart, dir, GameData.distance);
             Debug.DrawLine(laserStart, laserStart + Manager.instance.areaLimit[i] * GameData.distance, Color.red);
 
 

@@ -10,8 +10,6 @@ public class PlayerMoveTest : MonoBehaviour
 
     public void RoadInit()
     {
-        Debug.Log(GameData.moveDelta[0]);
-        Debug.Log(GameData.moveDelta[9]);
         float posY = mainRoad.position.y;
 
 

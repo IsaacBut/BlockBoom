@@ -471,7 +471,6 @@ GameObject:
   - component: {fileID: 566200940}
   - component: {fileID: 566200939}
   - component: {fileID: 566200941}
-  - component: {fileID: 566200942}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -521,24 +520,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 431df39d2c189c54d9ca57b92fc69547, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &566200942
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 566200938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f46e06e53a7ea424090461963f1b7341, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  musicSounds:
-  - name: InGame_Bgm
-    clip: {fileID: 8300000, guid: 6876d15e5f5c10f4f9fefa85d221d2e7, type: 3}
-  sfxSounds: []
-  musicSource: {fileID: 1875060352}
-  sfxSource: {fileID: 515977209}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,7 +925,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1371194120
 RectTransform:
   m_ObjectHideFlags: 0

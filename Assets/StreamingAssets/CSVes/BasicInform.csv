@@ -1,0 +1,13 @@
+﻿Game Basic,Value,,,GameObject ,Code,Path,,,,
+,,,,,,,,,,
+playerMoveSpeed,10,NonUse,,普通のブロック,N,Prefabs/Block,,,,
+弾の移動速度,25,,,ボム,B,Prefabs/Boom,,,,
+弾の上限,50,,,壁,W,Prefabs/Wall,,,,
+爆風の広く速度,100,,,壁ボム,WB,Prefabs/WallBoom,,,,
+,,,,壁ボム-壁,CBW,Prefabs/CanBreakBoom,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,End

@@ -46,7 +46,7 @@ public class ScoreManager : MonoBehaviour
     {
         string json = JsonUtility.ToJson(rankList, true);
         File.WriteAllText(rankPath, json);
-        Debug.Log("保存成功: " + rankPath);
+        Debug.LogWarning("保存成功: " + rankPath);
     }
 
     void LoadRank()
