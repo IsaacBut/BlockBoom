@@ -8,6 +8,7 @@ public class PlayerMoveTest : MonoBehaviour
     public RectTransform[] roadPoint;
     public RectTransform[] hardAndTail;
 
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
     public void RoadInit()
     {
         float posY = mainRoad.position.y;
@@ -25,16 +26,27 @@ public class PlayerMoveTest : MonoBehaviour
         mainRoad.localPosition = new Vector3(0, -75, -1);
 
 
-    
+
         for (int i = 0; i < roadPoint.Length; i++)
         {
             roadPoint[i].sizeDelta = new Vector2(10, Manager.instance.playerArea.sizeDelta.y);
-            roadPoint[i].position = new Vector2(GameData.moveDelta[i+1], posY);
+            roadPoint[i].position = new Vector2(GameData.moveDelta[i + 1], posY);
         }
 
 
 
     }
+
+#else
+    public void RoadInit()
+    {
+        Destroy(this.gameObject);
+    }
+
+
+#endif
+
+
 
 
 }

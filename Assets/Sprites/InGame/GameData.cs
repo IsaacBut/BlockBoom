@@ -182,12 +182,20 @@ namespace Data
     }
 
     [System.Serializable]
+    public class ScoreData
+    {
+        public int level;
+        public int stage;
+        public int score;
+
+    }
+
+    [System.Serializable]
     public class RankData
     {
         public string playerName;
-        public int score_Level01 = 0;
-        public int score_Level02 = 0;
-        public int score_Level03 = 0;
+
+        public List<ScoreData> scoreData = new List<ScoreData>();
 
     }
     [System.Serializable]

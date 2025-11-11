@@ -133,6 +133,22 @@ public class Manager : MonoBehaviour
     {
         SceneManager.LoadScene("GameTitle", LoadSceneMode.Single);
     }
+
+    void OnApplicationFocus(bool focused)
+    {
+        if (focused)
+        {
+            // 玩家回到游戏
+            isPause = false;
+        }
+        else
+        {
+            // 玩家切出去 / Alt+Tab
+            isPause = true;
+        }
+
+        IsPause();
+    }
     #endregion
 
     #region BlockGenerate
@@ -279,14 +295,21 @@ public class Manager : MonoBehaviour
     private float timer;
     private float gameMusicLenght;
 
+    [SerializeField] TMP_Text musicTimer;
+
+    private int timer_M => (int)(timer / 60);
+    private int timer_S => (int)(timer % 60);
+    private int music_M => (int)(gameMusicLenght / 60);
+    private int music_S => (int)(gameMusicLenght % 60);
+
+    private void MusicTimer() => musicTimer.text = $"{timer_M:D2} :{timer_S:D2} / {music_M:D2} : {music_S:D2} ";
 
     bool isReady;
 
     private void MusicInit()
     {
         AudioManager.instance.ChangeCrip(inGame_Bgm,CSVReader.instance.ReadTargetCellString(GameData.levelStage, "B", 14));
-        gameMusicLenght = AudioManager.instance.CripLenght(inGame_Bgm);
-        Debug.Log(gameMusicLenght);
+
     }
 
     private IEnumerator Ready()
@@ -296,7 +319,13 @@ public class Manager : MonoBehaviour
         //isReady = true;
         yield return new WaitForSeconds(1f);
         AudioManager.instance.PlayMusic(inGame_Bgm,100);
+        gameMusicLenght = AudioManager.instance.CripLenght(inGame_Bgm);
+        Debug.Log($"{gameMusicLenght}");
+
         isGameStart = true;
+        yield return new WaitForSeconds(0.01f);
+        StartCoroutine(Player.instance.MoveThroughPointsLoop());
+
     }
 
 
@@ -313,13 +342,16 @@ public class Manager : MonoBehaviour
 
     bool IsGameSet()
     {
-        return IsAllBlockGone()|| IsNoBullet();
-        //|| IsMusicDone();
+        return IsAllBlockGone() || IsNoBullet() || IsMusicDone();
     }
 
-    void GameSet()
+    IEnumerator GameSet()
     {
         GameManager.instance.pastScoreFromInGame = nowPoint;
+        ScoreManager.instance.AddRank(GameManager.instance.level, GameManager.instance.stage, nowPoint);
+
+        yield return new WaitForSeconds(0.5f);
+        AudioManager.instance.EndMusic(inGame_Bgm);
         if (IsAllBlockGone()) SceneManager.LoadScene("GameClear", LoadSceneMode.Single);
         else if (IsNoBullet() && !IsAllBlockGone()) SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
         // else if (IsMusicDone() && !IsAllBlockGone()) SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
@@ -360,9 +392,11 @@ public class Manager : MonoBehaviour
         //if (!AudioManager.instance.IsPlaying()) AudioManager.instance.PlayMusic("Moonlight", 1);
         playerMoveTest.RoadInit();
 
-
+        higestScore.text = ScoreManager.instance.GetRank(GameManager.instance.level, GameManager.instance.stage).ToString("D5");
         StartCoroutine(Ready());
     }
+
+
 
     private void Update()
     {
@@ -377,7 +411,11 @@ public class Manager : MonoBehaviour
                 isPause = !isPause;
                 IsPause();
             }
-            timer += !isPause ? Time.unscaledDeltaTime : 0;
+            if (!isPause) timer += Time.deltaTime;
+
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+            MusicTimer();
+#endif
 
             if (isMapBuild)
             {
@@ -394,9 +432,8 @@ public class Manager : MonoBehaviour
 
                 }
 
-                if (IsGameSet()) { GameSet(); }
             }
-
+            if (IsGameSet()) {  StartCoroutine(GameSet()); }
             PrintPlayerInform();
         }
       

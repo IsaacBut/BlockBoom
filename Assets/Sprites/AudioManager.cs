@@ -72,9 +72,9 @@ public class AudioManager : MonoBehaviour
         }
 
         AudioClip clip = DownloadHandlerAudioClip.GetContent(req);
+        clip.name = System.IO.Path.GetFileNameWithoutExtension(path);
 
         clip.hideFlags = HideFlags.DontUnloadUnusedAsset;
-
         s.clip = clip;  // ✅ 正确赋值
         Debug.Log($"[ChangeClip] Loaded and changed BGM: {clip.name}");
     }

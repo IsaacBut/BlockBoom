@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Data;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -85,32 +87,41 @@ public class ScoreManager : MonoBehaviour
         SaveRank();
     }
 
-    public void AddRank(string name, int level, int score)
+    public void AddRank(int level, int stage, int score)
     {
-        var rankData = TargetRankData(name);
+        var rankData = TargetRankData(nowPlayer);
         if (rankData == null)
         {
-            Debug.LogWarning($"Player {name} not found, auto creating new record.");
-            PlayerInit(name);
-            rankData = TargetRankData(name);
+            Debug.LogWarning($"Player {nowPlayer} not found, auto creating new record.");
+            PlayerInit(nowPlayer);
+            rankData = TargetRankData(nowPlayer);
         }
-
-        switch (level)
+        var stageScore = rankData.scoreData.Find(s => s.level == level && s.stage == stage);
+        if (stageScore == null)
         {
-            case 1: rankData.score_Level01 = score; break;
-            case 2: rankData.score_Level02 = score; break;
-            case 3: rankData.score_Level03 = score; break;
-            default: Debug.LogWarning("Wrong Level"); break;
+            stageScore = new ScoreData { level = level, stage = stage, score = score };
+            rankData.scoreData.Add(stageScore);
         }
+        else { stageScore.score = Mathf.Max(stageScore.score, score); }
 
-        SaveRank();
+            SaveRank();
+    }
+
+    public int GetRank(int level, int stage)
+    {
+        var rankData = TargetRankData(nowPlayer);
+        if (rankData == null) return 0;
+        var stageScore = rankData.scoreData.Find(s => s.level == level && s.stage == stage);
+        if (stageScore == null) return 0;
+
+        return stageScore.score;
     }
 
     public void RankShowInit()
     {
-        rankList.ranks.Sort((a, b) => (b.score_Level01 + b.score_Level02 + b.score_Level03).CompareTo((a.score_Level01 + a.score_Level02 + a.score_Level03)));
-        if (rankList.ranks.Count > MaxRank) rankList.ranks.RemoveRange(MaxRank, rankList.ranks.Count - MaxRank);
+        rankList.ranks.Sort((a, b) => b.scoreData.Sum(s => s.score).CompareTo(a.scoreData.Sum(s => s.score)));
 
+        if (rankList.ranks.Count > MaxRank) rankList.ranks.RemoveRange(MaxRank, rankList.ranks.Count - MaxRank);
     }
 
     public string[] Rank_PlayerName()
@@ -127,13 +138,16 @@ public class ScoreManager : MonoBehaviour
 
     public int[] Rank_TotalScore()
     {
-        if (rankList == null || rankList.ranks == null) return new int[0];
+        if (rankList == null || rankList.ranks == null)
+            return new int[0];
 
         int[] rank_TotalScore = new int[rankList.ranks.Count];
+
         for (int i = 0; i < rankList.ranks.Count; i++)
         {
-            rank_TotalScore[i] = rankList.ranks[i].score_Level01 + rankList.ranks[i].score_Level02 + rankList.ranks[i].score_Level03;
+            rank_TotalScore[i] = rankList.ranks[i].scoreData.Sum(s => s.score);
         }
+
         return rank_TotalScore;
     }
 

@@ -774,6 +774,8 @@ MonoBehaviour:
   musicSounds:
   - name: InGame_Bgm
     clip: {fileID: 8300000, guid: 6876d15e5f5c10f4f9fefa85d221d2e7, type: 3}
+  - name: Ready_Bgm
+    clip: {fileID: 8300000, guid: 6876d15e5f5c10f4f9fefa85d221d2e7, type: 3}
   sfxSounds: []
   musicSource: {fileID: 1875060352}
   sfxSource: {fileID: 515977209}

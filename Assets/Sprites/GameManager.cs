@@ -8,8 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
 
-
-
+    
 
     private UIManager uiManager => UIManager.instance;
     public UI _ui => uiManager.ui;
