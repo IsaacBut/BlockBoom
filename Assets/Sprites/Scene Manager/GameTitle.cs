@@ -51,7 +51,7 @@ public class GameTitle : MonoBehaviour
     public void GoRankButton() 
     {
         //SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
-
+        ScoreManager.instance.RankShowInit();
         SceneManager.LoadScene("Rank", LoadSceneMode.Single);
 
     }

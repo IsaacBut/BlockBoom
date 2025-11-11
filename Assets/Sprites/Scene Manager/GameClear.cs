@@ -5,24 +5,13 @@ using UnityEngine.SocialPlatforms.Impl;
 using Data;
 public class GameClear : MonoBehaviour
 {
-    public RectTransform canvasRect; // Canvas “I RectTransform
-
-    public RectTransform backGroundImageRect;  // Image “I RectTransform
-    public RectTransform gameClearLogoRect;
-
-    const int scoreSize = 3;
-    public RectTransform[] scoreRect;
     public TMP_Text score;
-
-    public RectTransform button_BackToLevelSelectRect;
-    public RectTransform button_NextStageRect;
-
 
     const int stageLimit = 5;
 
     private void Start()
     {
-
+        score.text = GameManager.instance.pastScoreFromInGame.ToString("D5");
     }
 
     public void Button_NextStage()

@@ -34,8 +34,7 @@ public class Player : MonoBehaviour
 
         moveTime = 60 / CSVReader.instance.ReadTargetCellIndex(GameData.levelStage, "B", 13);
 
-        Debug.Log(nowBulletAmount);
-        StartCoroutine(MoveThroughPointsLoop());
+        this.transform.position = points[1];
     }
     public bool IsEmptyBullet() => nowBulletAmount <= 0;
     const int startIngIndex = 1;
@@ -53,7 +52,7 @@ public class Player : MonoBehaviour
     }
 
 
-    IEnumerator MoveThroughPointsLoop()
+    public IEnumerator MoveThroughPointsLoop()
     {
         int currentIndex = startIngIndex;
 

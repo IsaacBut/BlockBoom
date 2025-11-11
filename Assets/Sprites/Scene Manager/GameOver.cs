@@ -5,19 +5,13 @@ using Data;
 
 public class GameOver : MonoBehaviour
 {
-    public RectTransform canvasRect; // Canvas “I RectTransform
-
-    public RectTransform backGroundImageRect;  // Image “I RectTransform
-    public RectTransform gameOverLogoRect;
-
-    const int scoreSize = 3;
-    public RectTransform[] scoreRect;
     public TMP_Text score;
 
-    public RectTransform button_BackToTitleRect;
-    public RectTransform button_RetryRect;
+    private void Start()
+    {
+        score.text = GameManager.instance.pastScoreFromInGame.ToString("D5");
+    }
 
-    const int stageLimit = 5;
 
     public void Button_Retry()
     {
