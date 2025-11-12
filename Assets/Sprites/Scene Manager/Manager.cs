@@ -116,6 +116,11 @@ public class Manager : MonoBehaviour
         }
     }
 
+    public void Button_Pause()
+    {
+        isPause = !isPause;
+        IsPause();
+    }
     public void Button_ReSume() 
     { 
         isPause = false;
@@ -177,18 +182,20 @@ public class Manager : MonoBehaviour
 
         for (int x = 4; x < row; x++)
         {
+            if (x - 4 > GameData.rowNumber) return;
+
             for (int y = 4; y < col; y++)
             {
-                float posX = GameData.Width(x - 3);
-                float posY = GameData.Height(y - 3);
+                if (y - 4 > GameData.colNumber) continue;
+
+                float posX = GameData.Width(x - 4);
+                float posY = GameData.Height(y - 4);
 
 
                 if (x == 4 || x == row - 1 || y == 4 || y == col - 1)
                 {
                     areaLimit.Add(new Vector2(posX, posY));
                 }
-
-
 
                 string targetCode = CSVReader.instance.ReadTargetCellString(GameData.levelStage, CSVReader.instance.IndexToColumnName(x), y);
 
@@ -408,8 +415,7 @@ public class Manager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                isPause = !isPause;
-                IsPause();
+                Button_Pause();
             }
             if (!isPause) timer += Time.deltaTime;
 
