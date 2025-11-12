@@ -62,6 +62,10 @@ public class UIManager : MonoBehaviour
         float width = Screen.width;
         float height = Screen.height;
 
+        //float width = 2448;
+        //float height = 1080;
+
+
         float nowScreenRadio = width / height;
         float epsilon = 0.001f;
         screenFit = Mathf.Abs(nowScreenRadio - radio) < epsilon;
@@ -130,8 +134,9 @@ public class UIManager : MonoBehaviour
     {
         if (!isAreaSizeInit) AreaSizeInit();
         if (!isAreaPosInit) AreaPosInit();
-        if (!isPlayAreaInit) PlayAreaInit();
         if (!isPlayerAreaInit) PlayerAreaInit();
+        if (!isPlayAreaInit) PlayAreaInit();
+
     }
 
 
@@ -145,7 +150,7 @@ public class UIManager : MonoBehaviour
 
 
         ui.playerInformArea = new Vector2(screenSize.x, 0.75f * scaleByHeight);
-        ui.playArea = new Vector2(22f * scaleByWidth, 7f * scaleByHeight);
+        ui.playArea = new Vector2(scaleByWidth, 7f * scaleByHeight);
         ui.playerArea = new Vector2(screenSize.x, 1.25f * scaleByHeight);
 
         isAreaSizeInit = true;
@@ -182,18 +187,11 @@ public class UIManager : MonoBehaviour
         isAreaPosInit = true;
 
     }
-    void PlayAreaInit()
-    {
 
-        GameData.playAreaPosition = playArea.position;
-        GameData.worldCorners = new Vector3[4];
-        playArea.GetWorldCorners(GameData.worldCorners);
-        isPlayAreaInit = true;
-    }
     void PlayerAreaInit()
     {
         Vector3[] canvasCorners = new Vector3[4];
-        canvasRect.GetWorldCorners(canvasCorners);
+        playerArea.GetWorldCorners(canvasCorners);
 
         float dx = Mathf.Abs(canvasCorners[0].x - canvasCorners[2].x);
         float delta = dx / GameData.deltaLine;
@@ -210,9 +208,59 @@ public class UIManager : MonoBehaviour
         isPlayerAreaInit = true;
     }
 
+    //void PlayAreaInit()
+    //{
 
 
 
+    //    GameData.playAreaPosition = playArea.position;
+    //    playArea.sizeDelta = new Vector2(GameData.moveDelta[8] - GameData.moveDelta[1], playArea.sizeDelta.y);
+    //    Debug.Log($"当前宽度: {GameData.moveDelta[8] - GameData.moveDelta[1]}");
+
+    //    GameData.worldCorners = new Vector3[4];
+    //    playArea.GetWorldCorners(GameData.worldCorners);
+    //    isPlayAreaInit = true;
+    //}
+    void PlayAreaInit()
+    {
+        GameData.playAreaPosition = playArea.position;
+
+        // 获取 Canvas 及其相机
+        Canvas rootCanvas = playArea.GetComponentInParent<Canvas>();
+        Camera cam = rootCanvas.worldCamera;
+
+        // 获取 Canvas 的 RectTransform（根对象）
+        RectTransform canvasRect = rootCanvas.GetComponent<RectTransform>();
+
+        // 将世界坐标转换到 Canvas 局部坐标
+        Vector2 localPoint1, localPoint8;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            RectTransformUtility.WorldToScreenPoint(cam, new Vector3(GameData.moveDelta[1], 0f, 0f)),
+            cam,
+            out localPoint1
+        );
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            RectTransformUtility.WorldToScreenPoint(cam, new Vector3(GameData.moveDelta[8], 0f, 0f)),
+            cam,
+            out localPoint8
+        );
+
+        // 计算在 UI 坐标下的宽度
+        float width = Mathf.Abs(localPoint8.x - localPoint1.x);
+
+        // 设置 UI 元素宽度
+        playArea.sizeDelta = new Vector2(width, playArea.sizeDelta.y);
+
+        Debug.Log($"转换后宽度: {width} (Canvas Mode: {rootCanvas.renderMode}, Camera: {cam.name})");
+
+        // 获取世界坐标四角（如需）
+        GameData.worldCorners = new Vector3[4];
+        playArea.GetWorldCorners(GameData.worldCorners);
+
+        isPlayAreaInit = true;
+    }
 
     void LoadUIData()
     {

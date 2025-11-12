@@ -69,20 +69,44 @@ namespace Data
         //static Vector3[] worldCorners = new Vector3[4];
         //0->L.U, 1->L.D, 2->R.U, 3->R.D
 
-        static int rowNumber;
-        static int colNumber;
+        public static int rowNumber { get; private set; }
+        public static int colNumber { get; private set; }
 
         public const int deltaLine = 8;
+
+        static int BlockSizeRedia()
+        {
+            int row = 7;
+
+            switch (rowNumber)
+            {
+                case 8:
+                    row *= 1; break;
+                case 15:
+                    row *= 2; break;
+                case 22:
+                    row *= 3; break;
+                case 29:
+                    row *= 4; break;
+                case 36:
+                    row *= 5; break;
+                default:            return 0;
+            }
+
+            return row;
+        }
+
 
         static void CaluBlockSize()
         {
             float dx = Mathf.Abs(worldCorners[0].x - worldCorners[2].x);
+            dx /= BlockSizeRedia();
             float dy = Mathf.Abs(worldCorners[1].y - worldCorners[3].y);
 
-            float xLong = dx/ rowNumber;
+            //float xLong = dx / rowNumber;
             float yLong = dy / colNumber;
 
-            blockSize = xLong ;
+            blockSize = dx;
             blockSizeY = yLong;
         }
 
@@ -91,9 +115,9 @@ namespace Data
             float posX;
 
             posX = worldCorners[0].x;
-            if (index < 1 || index > rowNumber) Debug.LogError("Out of range");
+            if (index < 0 || index > rowNumber) Debug.LogError("Out of range");
             posX += blockSize * index;
-            posX -= blockSize / 2;
+            //posX -= blockSize / 2;
             return posX;
         }
 
@@ -101,9 +125,9 @@ namespace Data
         {
             float posY;
             posY = worldCorners[1].y;
-            if (index < 1 || index > colNumber) Debug.LogError("Out of range");
+            if (index < 0 || index > colNumber) Debug.LogError("Out of range");
             posY -= blockSize * index;
-            posY += blockSize/2;
+            posY -= blockSize/2;
             return posY;
 
         }
@@ -139,6 +163,7 @@ namespace Data
 
             rowNumber = (int)CSVReader.instance.ReadTargetCellIndex(levelStage, "B", 3);
             colNumber = (int)CSVReader.instance.ReadTargetCellIndex(levelStage, "B", 4);
+            if (colNumber > (rowNumber / 2 - 1)) colNumber = (int)rowNumber / 2 - 1;
 
             float posX = Mathf.Abs(worldCorners[1].x - worldCorners[2].x);
             float posY = Mathf.Abs(worldCorners[1].y - worldCorners[2].y);

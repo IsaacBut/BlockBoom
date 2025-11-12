@@ -43,9 +43,16 @@ public class GameManager : MonoBehaviour
     {
         if (uiManager.IsGameEndInit() && !gameStart)
         {
+            //if (Input.GetKeyDown(KeyCode.Space))
+            //{
+            //    SceneManager.LoadScene("GameTitle", LoadSceneMode.Single);
+            //    gameStart = true;
+
+            //}
             SceneManager.LoadScene("GameTitle", LoadSceneMode.Single);
-            //ebug.Log(CSVReader.instance.ReadTargetCellIndex("CSVes/Level_00/Stage_00", "O", 17));
             gameStart = true;
+            //ebug.Log(CSVReader.instance.ReadTargetCellIndex("CSVes/Level_00/Stage_00", "O", 17));
+            //gameStart = true;
         }
         else if (!uiManager.IsGameEndInit())
         {

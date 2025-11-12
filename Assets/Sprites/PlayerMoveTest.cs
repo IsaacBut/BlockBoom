@@ -29,7 +29,7 @@ public class PlayerMoveTest : MonoBehaviour
 
         for (int i = 0; i < roadPoint.Length; i++)
         {
-            roadPoint[i].sizeDelta = new Vector2(10, Manager.instance.playerArea.sizeDelta.y);
+            roadPoint[i].sizeDelta = new Vector2(10, 1000);
             roadPoint[i].position = new Vector2(GameData.moveDelta[i + 1], posY);
         }
 
