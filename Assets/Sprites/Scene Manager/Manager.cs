@@ -7,11 +7,15 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
 public class Manager : MonoBehaviour
 {
     static public Manager instance { get; private set; }
     private UI _ui => GameManager.instance._ui;
+
+    public Keyboard keyboard => Keyboard.current;
+    public Touchscreen touchscreen => Touchscreen.current;
 
     const string ready_Bgm = "Ready_Bgm";
     const string inGame_Bgm = "InGame_Bgm";
@@ -39,6 +43,26 @@ public class Manager : MonoBehaviour
         score.text = nowPoint.ToString("D5");
         bulletAmount.text = Player.instance.nowBulletAmount.ToString("D2");
     }
+
+
+    float cd;
+    [SerializeField]float playerShootCd = 0;
+    public bool playerCanShoot = true;
+    public void Shot() => playerCanShoot = false;
+
+
+
+
+    void PlayerShootCdCount()
+    {
+        playerShootCd += Time.deltaTime;
+        if (playerShootCd > cd)
+        {
+            playerCanShoot = true;
+            playerShootCd = 0;
+        }
+    }
+
 
     #endregion
 
@@ -90,7 +114,7 @@ public class Manager : MonoBehaviour
 
     #region Pause
 
-    bool isPause = false;
+    [SerializeField] bool isPause = false;
 
     void PauseCanvasInit()
     {
@@ -128,10 +152,14 @@ public class Manager : MonoBehaviour
     }
     public void Button_ReTry()
     {
+        Time.timeScale = 1;
+        isPause = false;
         SceneManager.LoadScene("InGame", LoadSceneMode.Single);
+
     }
     public void Button_ReTrie()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene("LevelSelect", LoadSceneMode.Single);
     }
     public void Button_Title()
@@ -322,10 +350,12 @@ public class Manager : MonoBehaviour
     private IEnumerator Ready()
     {
         //if (!AudioManager.instance.IsPlaying()) AudioManager.instance.PlayMusic(ready_Bgm, 1);
+        yield return new WaitForSeconds(2f);
 
         //isReady = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.01f);
         AudioManager.instance.PlayMusic(inGame_Bgm,100);
+
         gameMusicLenght = AudioManager.instance.CripLenght(inGame_Bgm);
         Debug.Log($"{gameMusicLenght}");
 
@@ -349,7 +379,7 @@ public class Manager : MonoBehaviour
 
     bool IsGameSet()
     {
-        return IsAllBlockGone() || IsNoBullet() || IsMusicDone();
+        return IsAllBlockGone() || IsNoBullet() /*|| IsMusicDone()*/;
     }
 
     IEnumerator GameSet()
@@ -361,8 +391,9 @@ public class Manager : MonoBehaviour
         AudioManager.instance.EndMusic(inGame_Bgm);
         if (IsAllBlockGone()) SceneManager.LoadScene("GameClear", LoadSceneMode.Single);
         else if (IsNoBullet() && !IsAllBlockGone()) SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
+
         // else if (IsMusicDone() && !IsAllBlockGone()) SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
-        else { SceneManager.LoadScene("GameOver", LoadSceneMode.Single); }
+        //else { SceneManager.LoadScene("GameOver", LoadSceneMode.Single); }
     }
 
 
@@ -370,9 +401,7 @@ public class Manager : MonoBehaviour
 
     #endregion
 
-
-
-    bool isGameStart = false;
+    public bool isGameStart = false;
 
     private void Awake()
     {
@@ -382,6 +411,7 @@ public class Manager : MonoBehaviour
     public PlayerMoveTest playerMoveTest;
     private void Start()
     {
+
         PlayArea();
 
         GameData.GameDataInit(GameManager.instance.level, GameManager.instance.stage);
@@ -390,9 +420,8 @@ public class Manager : MonoBehaviour
         GenerateMap();
         StartCoroutine(WallInit());
         nowPoint = 0;
-
         MusicInit();
-
+        cd = GameData.playerShootCd;
         Player.instance.PlayerInit();
         //if (!AudioManager.instance.IsPlaying()) AudioManager.instance.PlayMusic("InGame_Bgm", 1);
         //Test
@@ -413,20 +442,24 @@ public class Manager : MonoBehaviour
         }
         else
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+
+            if (keyboard.escapeKey.wasPressedThisFrame)
             {
                 Button_Pause();
             }
-            if (!isPause) timer += Time.deltaTime;
+            if (!isPause)
+            {
+                timer += Time.deltaTime;
+                PlayerShootCdCount();
+            }
 
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
-            MusicTimer();
-#endif
+
 
             if (isMapBuild)
             {
 
-                wallGameObjectList.RemoveAll(item => item == null);
+                wallGameObjectList.RemoveAll(item => item == null || item.enabled == false);
+
                 wallBoomGameObjectList.RemoveAll(item => item == null);
                 boomGameObjectList.RemoveAll(item => item == null);
                 canBrakeGameObject.RemoveAll(item => item == null);
