@@ -10,15 +10,18 @@ namespace Data
         public static string basicCsv;
         public static string levelStage;
 
+        //Player
+        public static float playerShootCd;
+        public static float playerMoveTime;
+
         //  Bullet 
         public static float bulletMaxAmount;
-        public static float bulletMoveSpeed;//Delete soon
 
-        //  Boom's Flame
-        public static float flameSpreadSpeed;//Delete soon
+        //  Boom's Flame and WallBoom Spread
+        public static float spreadSpeed;
         public static float flameMaxRadius { get; set; }
 
-        // Canvas Area 
+        // 
 
 
         //Block Puts Area
@@ -54,11 +57,11 @@ namespace Data
         public static GameObject TargetGameObject(string targetCode)
         {
             GameObject targetGameObject = null;
-            if (targetCode == basicBlock) targetGameObject = Resources.Load<GameObject>(CSVReader.instance.ReadTargetCellString(basicCsv, "G", 3));
-            else if (targetCode == boomBlock) targetGameObject = Resources.Load<GameObject>(CSVReader.instance.ReadTargetCellString(basicCsv, "G", 4));
-            else if (targetCode == wallBlock) targetGameObject = Resources.Load<GameObject>(CSVReader.instance.ReadTargetCellString(basicCsv, "G", 5));
-            else if (targetCode == wallBoomBlock) targetGameObject = Resources.Load<GameObject>(CSVReader.instance.ReadTargetCellString(basicCsv, "G", 6));
-            else if (targetCode == canBreakBallBlock) targetGameObject = Resources.Load<GameObject>(CSVReader.instance.ReadTargetCellString(basicCsv, "G", 7));
+            if (targetCode == basicBlock) targetGameObject = Resources.Load<GameObject>(CSVReader.instance.ReadTargetCellString(basicCsv, "C", 3));
+            else if (targetCode == boomBlock) targetGameObject = Resources.Load<GameObject>(CSVReader.instance.ReadTargetCellString(basicCsv, "C", 4));
+            else if (targetCode == wallBlock) targetGameObject = Resources.Load<GameObject>(CSVReader.instance.ReadTargetCellString(basicCsv, "C", 5));
+            else if (targetCode == wallBoomBlock) targetGameObject = Resources.Load<GameObject>(CSVReader.instance.ReadTargetCellString(basicCsv, "C", 6));
+            else if (targetCode == canBreakBallBlock) targetGameObject = Resources.Load<GameObject>(CSVReader.instance.ReadTargetCellString(basicCsv, "C", 7));
 
 
             return targetGameObject;
@@ -141,16 +144,14 @@ namespace Data
         {
             basicCsv = "CSVes/BasicInform";
 
-            basicBlock = CSVReader.instance.ReadTargetCellString(basicCsv, "F", 3);
-            boomBlock = CSVReader.instance.ReadTargetCellString(basicCsv, "F", 4);
-            wallBlock = CSVReader.instance.ReadTargetCellString(basicCsv, "F", 5);
-            wallBoomBlock = CSVReader.instance.ReadTargetCellString(basicCsv, "F", 6);
-            canBreakBallBlock = CSVReader.instance.ReadTargetCellString(basicCsv, "F", 7);
+            basicBlock = CSVReader.instance.ReadTargetCellString(basicCsv, "B", 3);
+            boomBlock = CSVReader.instance.ReadTargetCellString(basicCsv, "B", 4);
+            wallBlock = CSVReader.instance.ReadTargetCellString(basicCsv, "B", 5);
+            wallBoomBlock = CSVReader.instance.ReadTargetCellString(basicCsv, "B", 6);
+            canBreakBallBlock = CSVReader.instance.ReadTargetCellString(basicCsv, "B", 7);
 
-            bulletMoveSpeed = CSVReader.instance.ReadTargetCellIndex(basicCsv, "B", 4);
-            bulletMaxAmount = CSVReader.instance.ReadTargetCellIndex(basicCsv, "B", 5);
+            //bulletMoveSpeed = CSVReader.instance.ReadTargetCellIndex(basicCsv, "B", 4);
 
-            flameSpreadSpeed = CSVReader.instance.ReadTargetCellIndex(basicCsv, "B", 6);
 
         }
 
@@ -161,9 +162,18 @@ namespace Data
         {
             SetLevelStage(level, stage);
 
+            playerMoveTime = 60 / CSVReader.instance.ReadTargetCellIndex(levelStage, "B", 13);
+
+            playerShootCd = CSVReader.instance.ReadTargetCellIndex(levelStage, "B", 16);
+            bulletMaxAmount = CSVReader.instance.ReadTargetCellIndex(levelStage, "B", 17);
+
+            float speed = CSVReader.instance.ReadTargetCellIndex(levelStage, "B", 19);
+
+            spreadSpeed = playerMoveTime * (1 / speed);
+
             rowNumber = (int)CSVReader.instance.ReadTargetCellIndex(levelStage, "B", 3);
             colNumber = (int)CSVReader.instance.ReadTargetCellIndex(levelStage, "B", 4);
-            if (colNumber > (rowNumber / 2 - 1)) colNumber = (int)rowNumber / 2 - 1;
+            if (colNumber > ((rowNumber / 2) - 1)) colNumber = (int)(rowNumber / 2) - 1;
 
             float posX = Mathf.Abs(worldCorners[1].x - worldCorners[2].x);
             float posY = Mathf.Abs(worldCorners[1].y - worldCorners[2].y);
@@ -181,7 +191,6 @@ namespace Data
     public class UI 
     {
         public Vector2Int canvasSize;
-
 
         public Vector2 playerInformArea;
         public Vector2 playArea;

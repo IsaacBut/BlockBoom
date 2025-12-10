@@ -7,7 +7,7 @@ using static Unity.Collections.AllocatorManager;
 
 public class Bullet : MonoBehaviour
 {
-    float moveSpeed = GameData.bulletMoveSpeed;
+    float moveSpeed = 25f;
     float boundsX, boundsY;
     Collider2D cd;
 
@@ -27,8 +27,9 @@ public class Bullet : MonoBehaviour
 
     private void Update()
     {
-        flyingTime += Time.deltaTime;
-        BulletMove();
+        if (Player.instance.lazerMode) flyingTime += Time.deltaTime * 100;
+        else BulletMove();
+        
     }
 
     void BulletMove()
@@ -42,7 +43,7 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (touchBlock) return;
-
+        if(Player.instance.lazerMode) return;
         //Debug.Log(collision.gameObject);
         switch (Manager.instance.FindObjectTag(collision.gameObject))
         {
@@ -53,17 +54,32 @@ public class Bullet : MonoBehaviour
             case "CanBrake":
                 touchBlock = true;
 
-                block = collision.gameObject.GetComponent<Block>();
                 boom = collision.gameObject.GetComponent<Boom>();
-                wallBoom = collision.gameObject.GetComponent<WallBoom>();
+                if (boom != null)
+                {
+                    boom.GoDestroy();
+                    BulletDestroy();
 
+                    break;
+                }
+
+                wallBoom = collision.gameObject.GetComponent<WallBoom>();
+                if (wallBoom != null)
+                {
+                    wallBoom.IsDestroy();
+                    BulletDestroy();
+                    break;
+                }
+
+                block = collision.gameObject.GetComponent<Block>();
                 if (block != null)
                 {
                     block.canSourePlus = false;
                     block.BlockDestroy();
+                    BulletDestroy();
+
+                    break;
                 }
-                if (boom != null) boom.GoDestroy();
-                if (wallBoom != null) wallBoom.IsDestroy();
 
                 BulletDestroy();
                 break;
@@ -71,7 +87,6 @@ public class Bullet : MonoBehaviour
             case "CantBrake":
                 touchBlock = true;
                 BulletDestroy();
-
                 break;
 
             default:

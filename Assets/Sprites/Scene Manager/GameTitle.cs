@@ -32,10 +32,7 @@ public class GameTitle : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyUp(KeyCode.O))
-        {
-            inputField.ForceLabelUpdate();
-        }
+
     }
 
 

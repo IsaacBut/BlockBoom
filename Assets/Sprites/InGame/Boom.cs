@@ -30,7 +30,7 @@ public class Boom : MonoBehaviour
 
         Vector3 startPoint = new Vector3(this.transform.position.x, this.transform.position.y, -0.11f);
         GameObject flamePrefab = Instantiate(flame, startPoint, Quaternion.identity);
-        flamePrefab.GetComponent<Flame>().FlameSetList(flameCanBrakeBlock);
+        //flamePrefab.GetComponent<Flame>().FlameSetList(flameCanBrakeBlock);
         flamePrefab.GetComponent<Flame>().FlameInit();
 
         Destroy(this.gameObject);
@@ -72,8 +72,12 @@ public class Boom : MonoBehaviour
 
                     if (hitObject.CompareTag("CanBrake"))
                     {
+                        Wall wall = hitObject.GetComponent<Wall>();
+                        if (wall != null) break;
+
                         WallBoom wallBoom = hitObject.GetComponent<WallBoom>();
                         if (wallBoom != null) break;
+
                         //Debug.Log(hitObject.name);
                         flameCanBrakeBlock.Add(hitObject);
 
@@ -107,6 +111,8 @@ public class Boom : MonoBehaviour
                 
                 if (hitObject.CompareTag("CanBrake"))
                 {
+                    Wall wall = hitObject.GetComponent<Wall>();
+                    if (wall != null) break;
                     WallBoom wallBoom = hitObject.GetComponent<WallBoom>();
                     if (wallBoom != null) break;
                     //Debug.Log(hitObject.name);
@@ -124,29 +130,15 @@ public class Boom : MonoBehaviour
         isFound = true;
     }
 
-    void Test()
-    {
-        if (flameCanBrakeBlock.Count != 0)
-        {
-            foreach (GameObject obj in flameCanBrakeBlock)
-            {
-                Destroy(obj);
-
-            }
-            flameCanBrakeBlock.RemoveAll(item => item == null);
-
-        }
-
-    }
 
     private void Update()
     {
 
-        if (flameCanBrakeBlock.Count != flameCanBrakeBlockNum)
-        {
-            isFound = false;
-        }
-        if (!isFound) { FindFlameCanBrakeBlock(); }
+        //if (flameCanBrakeBlock.Count != flameCanBrakeBlockNum)
+        //{
+        //    isFound = false;
+        //}
+        //if (!isFound) { FindFlameCanBrakeBlock(); }
 
 #if UNITY_EDITOR
 
