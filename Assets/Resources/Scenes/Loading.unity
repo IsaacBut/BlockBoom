@@ -779,6 +779,9 @@ MonoBehaviour:
   sfxSounds: []
   musicSource: {fileID: 1875060352}
   sfxSource: {fileID: 515977209}
+  musicLength: 0
+  targetSample: 0
+  startSample: 0
 --- !u!1 &924839571
 GameObject:
   m_ObjectHideFlags: 0

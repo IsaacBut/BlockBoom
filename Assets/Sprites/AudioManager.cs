@@ -221,6 +221,7 @@ public class AudioManager : MonoBehaviour
 
 #endif
 
+
     }
 
     /// <summary>
@@ -239,10 +240,14 @@ public class AudioManager : MonoBehaviour
         // Sound が存在しない、または clip が未設定なら 0 を返す
         // （ロード失敗や clip が破棄された場合にも安全）
         if (s == null || s.clip == null)
+        {
+            Debug.LogWarning("No Crip");
             return 0f;
 
+        }
+        musicLength = s.clip.length;
         // 正常 → AudioClip の長さを返す
-        return s.clip.length;
+        return musicLength;
     }
 
 
@@ -266,6 +271,7 @@ public class AudioManager : MonoBehaviour
         {
             musicSource.clip = s.clip;          // 再生する BGM を設定
             musicSource.volume = targetVolume;  // 音量を指定（0.0 ~ 1.0）
+            musicSource.timeSamples = startSample;
             musicSource.Play();                 // BGM の再生開始
         }
 
@@ -363,6 +369,42 @@ public class AudioManager : MonoBehaviour
             sfxSource.PlayOneShot(s.clip);     // Clip を一回だけ再生
         }
     }
+
+    [SerializeField] private float musicLength;
+    [SerializeField] private int targetSample;
+    [SerializeField] private int startSample;
+
+
+    public void SampleInit(string name,float startTime, float endTime)
+    {
+
+
+        Debug.LogWarning("SampleInit CALLED"); // ← 必须看到这个
+
+        Sound s = Array.Find(musicSounds, x => x.name == name);
+        if (s == null || s.clip == null)
+        {
+            Debug.LogWarning("No Crip");
+            return;
+
+        }
+        int frequency = s.clip.frequency;
+        startSample = Mathf.RoundToInt(startTime * frequency);
+        targetSample = Mathf.RoundToInt(Mathf.Min(endTime, musicLength) * frequency);
+
+    }
+
+    public void MusicLoop()
+    {
+        if (!musicSource.isPlaying) return;
+
+        if (musicSource.timeSamples >= targetSample)
+        {
+            musicSource.timeSamples = startSample;
+        }
+    }
+
+
 
     //public void SfxLoop(string name)
     //{

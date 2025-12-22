@@ -72,12 +72,13 @@ public class Flame : MonoBehaviour
 
     void Update()
     {
+        if (Manager.instance.gameSet) FlameDestroy();
+
         if (wallNum != Manager.instance.wallGameObjectList.Count)
         {
             isFound = false;
         }
         if (!isFound) { FindFlameCanBrakeBlock(); }
-
         Bigger();
     }
 

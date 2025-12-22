@@ -6,7 +6,6 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
 
 public class Manager : MonoBehaviour
@@ -16,6 +15,7 @@ public class Manager : MonoBehaviour
 
     public Keyboard keyboard => Keyboard.current;
     public Touchscreen touchscreen => Touchscreen.current;
+    public Mouse mouse => Mouse.current;
 
     const string ready_Bgm = "Ready_Bgm";
     const string inGame_Bgm = "InGame_Bgm";
@@ -72,6 +72,8 @@ public class Manager : MonoBehaviour
     public RectTransform playArea;
     public RectTransform playInformArea;
     public RectTransform playerArea;
+    public Image[] lightEffect;
+
 
     public List<Vector2> areaLimit;
 
@@ -82,6 +84,7 @@ public class Manager : MonoBehaviour
         playArea.sizeDelta = _ui.playArea;
         playerArea.sizeDelta = _ui.playerArea;
 
+
         //playInformArea.pivot = new Vector2(playInformArea.pivot.x, 1f);
         playArea.pivot = new Vector2(playArea.pivot.x, 1f);
         playerArea.pivot = new Vector2(playerArea.pivot.x, 1f);
@@ -89,6 +92,7 @@ public class Manager : MonoBehaviour
         //playInformArea.localPosition = _ui.playInformAreaPos;
         playArea.localPosition = _ui.playAreaPos;
         playerArea.localPosition = _ui.playerAreaPos;
+
 
         RectTransform rt = playerArea;
 
@@ -109,6 +113,34 @@ public class Manager : MonoBehaviour
 
     }
 
+    const int fixedFps = 120;
+    const int lightLevel = 5;
+    readonly int lightRedio = 255 / lightLevel;
+    const int levelChange = 10;
+    public Color lightColor;
+    int nowFps;
+    int targetLevel;
+
+    void LightEffect()
+    {
+        int frame = Time.frameCount % fixedFps;
+
+        if (frame < 10) targetLevel = 3;
+        else if (frame < 30) targetLevel = 4;
+        else if (frame < 90) targetLevel = 5;
+        else if (frame < 110) targetLevel = 2;
+        else targetLevel = 1;
+
+        targetLevel *= lightRedio;
+        ApplyLight();
+    }
+
+    void ApplyLight()
+    {
+        lightColor.a = targetLevel / 255f;
+        lightEffect[0].color = lightColor;
+        lightEffect[1].color = lightColor;
+    }
 
     #endregion
 
@@ -125,6 +157,7 @@ public class Manager : MonoBehaviour
 
     void IsPause()
     {
+        if (gameSet) return;
         if (isPause)
         {
             pauseCanvas.gameObject.SetActive(true);
@@ -337,6 +370,9 @@ public class Manager : MonoBehaviour
     private int music_M => (int)(gameMusicLenght / 60);
     private int music_S => (int)(gameMusicLenght % 60);
 
+    float endTime = 10000f;
+    float startTime = 0f;
+
     private void MusicTimer() => musicTimer.text = $"{timer_M:D2} :{timer_S:D2} / {music_M:D2} : {music_S:D2} ";
 
     bool isReady;
@@ -345,22 +381,24 @@ public class Manager : MonoBehaviour
     {
         AudioManager.instance.ChangeCrip(inGame_Bgm,CSVReader.instance.ReadTargetCellString(GameData.levelStage, "B", 14));
 
+
     }
 
     private IEnumerator Ready()
     {
         //if (!AudioManager.instance.IsPlaying()) AudioManager.instance.PlayMusic(ready_Bgm, 1);
+
         yield return new WaitForSeconds(2f);
+        AudioManager.instance.CripLenght(inGame_Bgm);
+        AudioManager.instance.SampleInit(inGame_Bgm,startTime, endTime);
 
-        //isReady = true;
+        //gameMusicLenght = AudioManager.instance.CripLenght(inGame_Bgm);
+
         yield return new WaitForSeconds(0.01f);
-        AudioManager.instance.PlayMusic(inGame_Bgm,100);
-
-        gameMusicLenght = AudioManager.instance.CripLenght(inGame_Bgm);
-        Debug.Log($"{gameMusicLenght}");
 
         isGameStart = true;
-        yield return new WaitForSeconds(0.01f);
+        AudioManager.instance.PlayMusic(inGame_Bgm,100);
+        //Debug.Log($"{gameMusicLenght}");
         StartCoroutine(Player.instance.MoveThroughPointsLoop());
 
     }
@@ -370,13 +408,64 @@ public class Manager : MonoBehaviour
 
     #region GameSet
 
-    int nowPoint;
+    public GameObject loadingCanvas;
+    public GameObject loadingImage;
+    public Image loadingpanel;
 
+
+    IEnumerator FadeAlpha(float start, float end, float duration)
+    {
+        float time = 0f;
+        Color color = loadingpanel.color;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = time / duration;
+            color.a = Mathf.Lerp(start, end, t);
+            loadingpanel.color = color;
+            yield return null;
+        }
+
+        color.a = end;
+        loadingpanel.color = color;
+    }
+
+
+
+    private IEnumerator Loading()
+    {
+        // 初始化
+        loadingCanvas.SetActive(true);
+        loadingpanel.enabled = true;
+        loadingImage.SetActive(false);
+
+        // 保证起始是透明
+        Color color = loadingpanel.color;
+        color.a = 0f;
+        loadingpanel.color = color;
+
+        // ① Fade In（透明 → 黑）
+        yield return StartCoroutine(FadeAlpha(0f, 1f, 0.2f));
+        // ② 显示 Loading
+        loadingImage.SetActive(true);
+
+        yield return StartCoroutine(FadeAlpha(1f, 0f, 0.2f));
+
+        yield return new WaitForSeconds(1);
+
+        // ④ Fade Out（黑 → 透明）
+        yield return StartCoroutine(FadeAlpha(0f, 1f, 0.2f));
+
+    }
+
+    int nowPoint;
     bool IsAllBlockGone() => canBrakeGameObject.Count == 0;
     bool IsNoBullet() => Player.instance.nowBulletAmount <= 0;
 
     bool IsMusicDone() => timer >= gameMusicLenght;
 
+    public bool gameSet;
     bool IsGameSet()
     {
         return IsAllBlockGone() || IsNoBullet() /*|| IsMusicDone()*/;
@@ -384,11 +473,13 @@ public class Manager : MonoBehaviour
 
     IEnumerator GameSet()
     {
+        gameSet = true;
         GameManager.instance.pastScoreFromInGame = nowPoint;
         ScoreManager.instance.AddRank(GameManager.instance.level, GameManager.instance.stage, nowPoint);
-
-        yield return new WaitForSeconds(0.5f);
         AudioManager.instance.EndMusic(inGame_Bgm);
+
+        //yield return StartCoroutine(Loading());
+        yield return new WaitForSeconds(0.05f);
         if (IsAllBlockGone()) SceneManager.LoadScene("GameClear", LoadSceneMode.Single);
         else if (IsNoBullet() && !IsAllBlockGone()) SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
 
@@ -407,6 +498,9 @@ public class Manager : MonoBehaviour
     {
         if (instance == null) instance = this;
         else Destroy(this);
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = fixedFps;
+
     }
     public PlayerMoveTest playerMoveTest;
     private void Start()
@@ -416,6 +510,8 @@ public class Manager : MonoBehaviour
 
         GameData.GameDataInit(GameManager.instance.level, GameManager.instance.stage);
         PauseCanvasInit();
+        loadingCanvas.SetActive(false);
+        loadingImage.SetActive(false);
 
         GenerateMap();
         StartCoroutine(WallInit());
@@ -429,6 +525,7 @@ public class Manager : MonoBehaviour
         playerMoveTest.RoadInit();
 
         higestScore.text = ScoreManager.instance.GetRank(GameManager.instance.level, GameManager.instance.stage).ToString("D5");
+
         StartCoroutine(Ready());
     }
 
@@ -436,24 +533,24 @@ public class Manager : MonoBehaviour
 
     private void Update()
     {
+
         if (!isGameStart)
         {
 
         }
         else
         {
-
+            AudioManager.instance.MusicLoop();
             if (keyboard.escapeKey.wasPressedThisFrame)
             {
                 Button_Pause();
             }
             if (!isPause)
             {
+                LightEffect();  
                 timer += Time.deltaTime;
                 PlayerShootCdCount();
             }
-
-
 
             if (isMapBuild)
             {
@@ -472,7 +569,7 @@ public class Manager : MonoBehaviour
                 }
 
             }
-            if (IsGameSet()) {  StartCoroutine(GameSet()); }
+            if (IsGameSet()&&!gameSet) {  StartCoroutine(GameSet()); }
             PrintPlayerInform();
         }
       
