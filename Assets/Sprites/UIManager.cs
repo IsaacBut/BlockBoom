@@ -32,6 +32,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private RectTransform playArea;
     [SerializeField] private RectTransform playerArea;
 
+
+
     bool IsScreenDataReady()
     {
         // 如果 ui_Size 没初始化，肯定不算就绪
@@ -148,7 +150,6 @@ public class UIManager : MonoBehaviour
         float scaleByWidth = screenSize.x / 24f;
         float scaleByHeight = screenSize.y / 9;
 
-
         ui.playerInformArea = new Vector2(screenSize.x, 0.75f * scaleByHeight);
         ui.playArea = new Vector2(scaleByWidth, 7f * scaleByHeight);
         ui.playerArea = new Vector2(screenSize.x, 1.25f * scaleByHeight);
@@ -157,28 +158,35 @@ public class UIManager : MonoBehaviour
     }
     void AreaPosInit()
     {
-        float canvasHeight = canvasRect.rect.height;
+        float canvasHeight = canvasRect.rect.height; 
+        float canvasWidth = canvasRect.rect.width;
 
         // 设置 Image 大小
         playInformArea.sizeDelta = ui.playerInformArea;
         playArea.sizeDelta = ui.playArea;
         playerArea.sizeDelta = ui.playerArea;
 
+
         playInformArea.pivot = new Vector2(playInformArea.pivot.x, 1f);
         playArea.pivot = new Vector2(playArea.pivot.x, 1f);
         playerArea.pivot = new Vector2(playerArea.pivot.x, 1f);
+
 
         float playInformAreaPosY = canvasHeight / 2;
         float playAreaPosY = playInformAreaPosY - ui.playerInformArea.y;
         float playerAreaPosY = playAreaPosY - ui.playArea.y;
 
+
         playInformArea.localPosition = new Vector3(0, playInformAreaPosY, playInformArea.localPosition.z);
         playArea.localPosition = new Vector3(0, playAreaPosY, playInformArea.localPosition.z);
         playerArea.localPosition = new Vector3(0f, playerAreaPosY, playInformArea.localPosition.z);
 
+
         ui.playInformAreaPos = playInformArea.localPosition;
         ui.playAreaPos = playArea.localPosition;
         ui.playerAreaPos = playerArea.localPosition;
+
+
 
         Debug.Log(ui.playInformAreaPos);
         Debug.Log(ui.playAreaPos);
@@ -187,7 +195,6 @@ public class UIManager : MonoBehaviour
         isAreaPosInit = true;
 
     }
-
     void PlayerAreaInit()
     {
         Vector3[] canvasCorners = new Vector3[4];
@@ -207,20 +214,6 @@ public class UIManager : MonoBehaviour
         }
         isPlayerAreaInit = true;
     }
-
-    //void PlayAreaInit()
-    //{
-
-
-
-    //    GameData.playAreaPosition = playArea.position;
-    //    playArea.sizeDelta = new Vector2(GameData.moveDelta[8] - GameData.moveDelta[1], playArea.sizeDelta.y);
-    //    Debug.Log($"当前宽度: {GameData.moveDelta[8] - GameData.moveDelta[1]}");
-
-    //    GameData.worldCorners = new Vector3[4];
-    //    playArea.GetWorldCorners(GameData.worldCorners);
-    //    isPlayAreaInit = true;
-    //}
     void PlayAreaInit()
     {
         GameData.playAreaPosition = playArea.position;
@@ -261,6 +254,7 @@ public class UIManager : MonoBehaviour
 
         isPlayAreaInit = true;
     }
+
 
     void LoadUIData()
     {

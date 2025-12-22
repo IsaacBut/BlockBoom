@@ -195,10 +195,10 @@ namespace Data
         public Vector2 playerInformArea;
         public Vector2 playArea;
         public Vector2 playerArea;
+
         public Vector3 playInformAreaPos;
         public Vector3 playAreaPos;
         public Vector3 playerAreaPos;
-
 
     }
 

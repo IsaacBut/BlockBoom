@@ -104,6 +104,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flame: {fileID: 1158146647809305655, guid: 07251926bf6df69468429262747d435f, type: 3}
   flameCanBrakeBlock: []
+  isFound: 0
+  isBoom: 0
 --- !u!61 &-3224502358389130202
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -226,7 +228,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1852256131479584069, guid: d8fbeab57b6aff14eb65b285b3db5c48, type: 3}
+  m_Sprite: {fileID: 6330403429295689359, guid: acca8c609a0a486479aa2b35a5b5dfab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

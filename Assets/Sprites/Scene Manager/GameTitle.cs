@@ -40,8 +40,10 @@ public class GameTitle : MonoBehaviour
     {
         //SceneManager.LoadScene("GameClear", LoadSceneMode.Single);
 
-        nameInput.SetActive(true);
-
+        //nameInput.SetActive(true);
+        GameManager.instance.PlayerInit("Testing Player");
+        inputField.text = "";
+        SceneManager.LoadScene("LevelSelect", LoadSceneMode.Single);
         //SceneManager.LoadScene("LevelSelect", LoadSceneMode.Single);
 
     }
