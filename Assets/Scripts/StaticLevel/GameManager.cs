@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
 
         uiManager.Init();
         csvReader.Init();
-
+        scoreManager.RankInit();
         isGameStart = true;
         canSceneUpdate = true;
     }
@@ -166,11 +166,12 @@ public class GameManager : MonoBehaviour
     private const int maxStage = 5;
     public int nowStage;
 
-    public bool isMaxStage = false;
+    public bool IsMaxStage() => nowLevel >= maxLevel && nowStage >= maxStage;
+    //public bool isMaxStage = false;
 
     public void NextStage()
     {
-        if (isMaxStage) return;
+        if (IsMaxStage()) return;
 
         nowStage++;
 
@@ -184,7 +185,6 @@ public class GameManager : MonoBehaviour
         {
             nowLevel = maxLevel;
             nowStage = maxStage;
-            isMaxStage = true;
             return;
         }
 
@@ -229,7 +229,7 @@ public class GameManager : MonoBehaviour
 
     [Header("InGame")]
     private InGame inGame;
-    public bool isGameClear;
+    public int finalScore;
 
     private IEnumerator InGameInit()
     {
@@ -252,6 +252,8 @@ public class GameManager : MonoBehaviour
     #region Release
     [Header("Release")]
     private Release release;
+    
+
     public enum GameResult
     {
         GameClear,
@@ -262,15 +264,18 @@ public class GameManager : MonoBehaviour
     public void GameClear() => gameResult = GameResult.GameClear;
     public void GameOver() => gameResult = GameResult.GameOver;
 
+
     private IEnumerator ReleaseInit()
     {
         yield return new WaitUntil(() => Release.Instance != null);
+        release = Release.Instance;
         release.Init();
         canSceneUpdate = true;
     }
 
     private void ReleaseUpdate()
     {
+
     }
 
 
@@ -288,6 +293,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Application.targetFrameRate = 120;
+        Debug.Log(AudioSettings.dspTime);
         uiManager = UIManager.Instance;
         scoreManager = ScoreManager.Instance;
         audioManager = AudioManager.Instance;

@@ -10,7 +10,8 @@ public class WallBoom : MonoBehaviour
 {
     [SerializeField] private HashSet<GameObject> walls = new HashSet<GameObject>();
     [SerializeField] private Dictionary<int, HashSet<Wall>> wallDestroyOrder;
-
+    private LayerMask targetLayer;
+    private float blockSize;
     //bool isFindConnectingWall = false;
     //bool isDestroy = false;
 
@@ -24,7 +25,10 @@ public class WallBoom : MonoBehaviour
 
     public void FindConnectingWall()
     {
-        if (!this.gameObject.activeSelf) return;
+        targetLayer = LayerMask.GetMask("AllBlock");
+        blockSize = 1;
+
+        //if (!this.gameObject.activeSelf) return;
         HashSet<Wall> connectingWall = new HashSet<Wall>();
         HashSet<Wall> nextLayer = new HashSet<Wall>();
 
@@ -33,11 +37,13 @@ public class WallBoom : MonoBehaviour
 
         for (int d = 0; d < directions.Length - 1; d++) //Didnt Check Down In First Loop
         {
-            RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, directions[d], InGame.Instance.blockSize);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, directions[d], blockSize / 2, targetLayer);
 
             for (int j = 0; j < hits.Length; j++)
             {
                 Wall wall = hits[j].collider.GetComponent<Wall>();
+                if (wall != null)Debug.Log($"found{wall.gameObject.transform.position} ");
+
                 if (wall != null && wall.GetWallType() == Wall.WallType.BreakAble && !connectingWall.Contains(wall))
                 {
                     walls.Add(wall.gameObject);
@@ -63,7 +69,7 @@ public class WallBoom : MonoBehaviour
             {
                 for (int d = 0; d < directions.Length; d++)
                 {
-                    RaycastHit2D[] hits = Physics2D.RaycastAll(connectedWall.transform.position, directions[d], InGame.Instance.blockSize);
+                    RaycastHit2D[] hits = Physics2D.RaycastAll(connectedWall.transform.position, directions[d], blockSize / 2, targetLayer);
                     foreach (RaycastHit2D detectedWall in hits)
                     {
                         Wall wall = detectedWall.collider.GetComponent<Wall>();
@@ -94,8 +100,13 @@ public class WallBoom : MonoBehaviour
 
     public void IsDestroy() { StartCoroutine(GoDestroy()); }
 
+    public void Start()
+    {
+        //FindConnectingWall();
+    }
 
-    IEnumerator GoDestroy()
+
+    private IEnumerator GoDestroy()
     {
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<BoxCollider2D>().enabled = false;
@@ -132,13 +143,22 @@ public class WallBoom : MonoBehaviour
 
 #endif
 
-#if UNITY_EDITOR
+    public bool startFind = false;
 
     private void Update()
     {
+#if UNITY_EDITOR
         if (isBoom) StartCoroutine(GoDestroy());
-    }
 
 #endif
+        if (startFind)
+        {
+            FindConnectingWall();
+            startFind = false;
+        }
+
+
+    }
+
 
 }

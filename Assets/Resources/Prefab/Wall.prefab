@@ -197,7 +197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Wall
   fourPoints: []
   wallCollider: {fileID: 0}
-  type: 0
+  type: 1
 --- !u!61 &-1712596066299516001
 BoxCollider2D:
   m_ObjectHideFlags: 0
