@@ -80,7 +80,7 @@ public class BoomFlame : MonoBehaviour
                 wallNumber = InGame.Instance.wallGameObjectList.Count;
             }
 
-            currentLength += distance * speed * Time.deltaTime * 7.5f;
+            currentLength += distance * speed * Time.deltaTime * 7f;
 
             foreach (var bone in flameBones)
             {

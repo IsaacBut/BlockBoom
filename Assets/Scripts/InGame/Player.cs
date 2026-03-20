@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
 #if UNITY_STANDALONE||UNITY_EDITOR
     public void ShootBullet()
     {
+        if (InGame.Instance.isGamePause) return;
         if (!canShoot)
         {
             shootCDTimer += Time.deltaTime;
@@ -79,6 +80,8 @@ public class Player : MonoBehaviour
 #if UNITY_ANDROID &&!UNITY_EDITOR
     public void ShootBullet()
     {
+                    if(InGame.Instance.isGamePause)return;
+
         if (!canShoot)
         {
             shootCDTimer += Time.deltaTime;
@@ -94,6 +97,7 @@ public class Player : MonoBehaviour
             var touch = touchscreen.primaryTouch;
             if (touch.press.wasPressedThisFrame)
             {
+
                 if (!canShoot) { StartCoroutine(CantShoot()); return; }
                 else if (nowbullet > 0 && !InGame.Instance.isGamePause) 
                 {

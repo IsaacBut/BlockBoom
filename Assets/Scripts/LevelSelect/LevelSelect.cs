@@ -5,6 +5,8 @@ public class LevelSelect : MonoBehaviour
 {
     public static LevelSelect Instance { get; private set; }
     private GameManager gameManager => GameManager.Instance;
+
+    public Tutorial tutorial;
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -14,6 +16,7 @@ public class LevelSelect : MonoBehaviour
     public void Init()
     {
         gameManager.SetPlayStage(1, 1);
+        tutorial.gameObject.SetActive(false);
         Debug.Log("LevelSelect Init");
     }
 
@@ -35,4 +38,11 @@ public class LevelSelect : MonoBehaviour
         gameManager.SetPlayStage(3, 1);
         GameManager.Instance.ScenesChange(Scenes.InGame);
     }
+
+    public void Button_Tutorial()
+    {
+        tutorial.gameObject.SetActive(true);
+
+    }
+
 }

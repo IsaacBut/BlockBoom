@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
 using TMPro;
@@ -30,14 +31,19 @@ public class InGame : MonoBehaviour
         deltaTime = nowTime - oldTime;
     }
 
-    public float timerLimt = 90.0f;
-    private float nowTimer;
+    private float nowTimer = 90;
+    private bool isTimeUp = false;
     private void PlayweTimer()
     {
-        beat.text = nowBeat.ToString("D2");
-        if (nowTimer < 0 || isGamePause) return;
+        //beat.text = nowBeat.ToString("D2");
         nowTimer -= (float)deltaTime;
-
+        if (nowTimer < 0)
+        {
+            isTimeUp = true;
+            return;
+        }
+        if (isGamePause) return;
+        
         int min = (int)nowTimer / 60;   // 1
         int sec = (int)nowTimer % 60;   // 30
 
@@ -54,7 +60,7 @@ public class InGame : MonoBehaviour
 
         for(int i = 1; i < points.Count-1; i++)
         {
-            if (Mathf.Abs(points[i].x - posX) < 0.1) return true;
+            if (Mathf.Abs(points[i].x - posX) < 0.2) return true;
         }
         return false;
     }
@@ -82,8 +88,12 @@ public class InGame : MonoBehaviour
     public RectTransform playerInformArea;
     public RectTransform playArea;
     public RectTransform playerArea;
+
     public RectTransform leftLightArea;
+    public Image leftLightImage;
+
     public RectTransform rightLightArea;
+    public Image rightLightImage;
 
     [Header("Player Inform Area")]
     [SerializeField] private RectTransform buttleImage;
@@ -128,6 +138,7 @@ public class InGame : MonoBehaviour
         playerArea.localPosition = new Vector3(ui.playerAreaPos.x, (ui.playerAreaPos.y - playerArea.sizeDelta.y / 2), ui.playerAreaPos.z);
 
         playerPosY = playerArea.transform.position.y;
+
     }
 
     private void PlayerInformAreaInit()
@@ -158,8 +169,10 @@ public class InGame : MonoBehaviour
         RectTransform timerRT = timer.GetComponent<RectTransform>(); 
         RectTransform beatRT = beat.GetComponent<RectTransform>();
 
-        timerRT.sizeDelta =ui.timerArea; 
+        timerRT.sizeDelta =ui.timerArea;
+        timer.fontSize = nowScoreIndex.fontSize;
         beatRT.sizeDelta = ui.beatArea;
+        beat.fontSize = nowScoreIndex.fontSize;
 
         timerRT.localPosition =ui.timerPos;
         beatRT.localPosition = ui.beatPos;
@@ -168,6 +181,24 @@ public class InGame : MonoBehaviour
         pause.localPosition = ui.pausePos;
 
     }
+
+
+    public double effectime;
+
+
+    private void LightEffect()
+    {
+        float t = Mathf.PingPong((float)(nowTime / effectime), 1f);
+
+        float a = Mathf.Lerp(0, 1, t);
+        Color c = leftLightImage.color;
+        c.a = a;
+        leftLightImage.color = c;
+        rightLightImage.color = c;
+    }
+
+
+
     #endregion
 
     #region Audio
@@ -245,6 +276,9 @@ public class InGame : MonoBehaviour
 
     public GameObject PauseCanvas;
     public GameObject TutorialCanvas;
+
+    private double pauseStartTime;
+
     private void PauseInit()
     {
         PauseCanvas.SetActive(false);
@@ -254,8 +288,10 @@ public class InGame : MonoBehaviour
     public void Button_Pause()
     {
         isGamePause = !isGamePause;
+        
         if (isGamePause)
         {
+            pauseStartTime = AudioSettings.dspTime;
             PauseCanvas.SetActive(true);
             StopMusic();
             Time.timeScale = 0.0f;
@@ -264,6 +300,7 @@ public class InGame : MonoBehaviour
         else
         {
             PauseCanvas.SetActive(false);
+            test_totalpauseTime += (AudioSettings.dspTime - pauseStartTime);
             PlayMusic();
             Time.timeScale = 1.0f;
 
@@ -282,10 +319,11 @@ public class InGame : MonoBehaviour
         gameManager.ScenesChange(GameManager.Scenes.GameTitle);
     }
 
-    public void Button_BackToTutorial()
+    public void Button_GoToTutorial()
     {
-        TutorialCanvas.SetActive(false);
+        TutorialCanvas.SetActive(true);
     }
+
 
     #endregion
 
@@ -565,21 +603,19 @@ public class InGame : MonoBehaviour
     {
         if (isGamePause)
         {
-
-            test_pauseTime = AudioSettings.dspTime - test_nowTime;
+            test_pauseTime += AudioSettings.dspTime - test_StartTime;
             return;
         }
         test_nowTime = AudioSettings.dspTime;
-        test_totalpauseTime += test_pauseTime;
         test_totaDeltaTime = nowTime - test_StartTime - test_totalpauseTime;
-
+        
         test_timeRedio = (int)(test_totaDeltaTime / test_LoopOfTime);
         test_deltaTime = test_totaDeltaTime - (test_timeRedio * test_LoopOfTime);
         test_timePerloopTime = test_deltaTime / test_LoopOfTime;
         test_distance = (float)(test_timePerloopTime * test_LoopOfDistance);
 
         float newPosX = points[0].x + test_distance;
-        player.transform.position = new Vector3(newPosX, playerPosY, -1);
+        player.transform.position = new Vector3(newPosX, playerPosY, 0);
 
 
     }
@@ -593,8 +629,8 @@ public class InGame : MonoBehaviour
 
     private bool IsAllBlockGone() => normalBlock.Count == 0;
 
-    private bool IsBulletEmpty() => player.nowbullet == 0 && bulletList.Count == 0;
-    private bool IsTimeUp() => nowTime < 0;
+    private bool IsBulletEmpty() => player.nowbullet <= 0 && bulletList.Count == 0;
+    private bool IsTimeUp() => isTimeUp;
 
     private bool IsGameSet() => IsAllBlockGone() || IsBulletEmpty()|| IsTimeUp();
 
@@ -614,10 +650,14 @@ public class InGame : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
 
         GameResult();
-        gameManager.finalScore = thisStageNowScore;
+        //gameManager.finalScore = thisStageNowScore;
+        //scoreManager.AddRank(gameManager.nowLevel, gameManager.nowStage, thisStageNowScore);
+
+        gameManager.finalScore = (thisStageNowScore / 5) * (1 + ((int)nowTimer / 20) + (player.nowbullet / 20) + (nowBeat / 10));
         scoreManager.AddRank(gameManager.nowLevel, gameManager.nowStage, thisStageNowScore);
 
-        yield return new WaitForSeconds(0.1f);
+
+        yield return new WaitForSeconds(2.0f);
         gameManager.ScenesChange(GameManager.Scenes.Release);
 
 
@@ -641,8 +681,8 @@ public class InGame : MonoBehaviour
         rowNumber = (int)csvReader.ReadTargetCellIndex(levelStageCsv, "B", 3);
         colNumber = (int)csvReader.ReadTargetCellIndex(levelStageCsv, "B", 4);
 
-        //musicCripPath = csvReader.ReadTargetCellString(levelStageCsv, "B", 14);
-        musicCripPath = "135bpm_game_loop";
+        musicCripPath = csvReader.ReadTargetCellString(levelStageCsv, "B", 14);
+        //musicCripPath = "135bpm_game_loop";
 
         player = Player.Instance;
         playerShootCd = csvReader.ReadTargetCellIndex(levelStageCsv, "B", 16);
@@ -650,9 +690,13 @@ public class InGame : MonoBehaviour
 
         //timePerOneBeat = bpm / 60.0;
         timePerOneBeat = 60.0 / bpm;
+        effectime = timePerOneBeat / 2;
 
         beatsPerSecond = (float)(1.0 / timePerOneBeat);
+
+
         distanceOfBeat = Mathf.Abs(points[1].x - points[2].x);
+        Time.timeScale = 1.0f;
         Text_Init();
     }
 
@@ -699,7 +743,6 @@ public class InGame : MonoBehaviour
     {
         isGamePause = false;
         PlayMusic();
-        nowTimer = timerLimt;
         oldTime = AudioSettings.dspTime;
         test_StartTime = AudioSettings.dspTime;
     }
@@ -712,10 +755,12 @@ public class InGame : MonoBehaviour
         ScoreUpdate();
         player.ShootBullet();
         playerNowBullet.text = player.nowbullet.ToString("D2");
+        
     }
 
     public void InGameLateUpdate()
     {
+        LightEffect();
         if (!IsGameSet())
         {
             NewPlayMove();

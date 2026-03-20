@@ -4,18 +4,22 @@ using UnityEngine.UI;
 public class Tutorial : MonoBehaviour
 {
     public Image[] tutorialImage;
-    private int nowInform;
+    [SerializeField] private int nowInform;
 
     private void OpenImage(int nowInformIndex)
     {
         foreach (var image in tutorialImage)
         {
-            image.enabled = false;
+            image.gameObject.SetActive(false);
         }
-        tutorialImage[nowInformIndex].enabled = true;
+        tutorialImage[nowInformIndex].gameObject.SetActive(true);
 
     }
 
+    private void Start()
+    {
+        OpenImage(nowInform);
+    }
 
     public void Button_GoNext()
     {
