@@ -213,7 +213,7 @@ public class CSVReader : MonoBehaviour
 
         while (!request.isDone)
         {
-            // 防止死循环
+            // 
         }
 
         if (request.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
@@ -224,7 +224,7 @@ public class CSVReader : MonoBehaviour
 
         string text = request.downloadHandler.text;
 
-        // ✅ 统一换行处理
+        //
         string[] lines = text
             .Replace("\r\n", "\n")
             .Replace("\r", "\n")

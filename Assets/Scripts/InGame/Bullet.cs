@@ -10,8 +10,8 @@ public class Bullet : MonoBehaviour
     private Boom boom;
     private WallBoom wallBoom;
 
-    private const float flytime = 1.5f;
-    private float flyingTime = 0;
+    private const float flytime = 1f;
+    public float flyingTime = 0;
     private bool touchBlock = false;
     private void Awake()
     {
@@ -24,16 +24,17 @@ public class Bullet : MonoBehaviour
     private void Update()
     {
         //if (Player.instance.lazerMode) flyingTime += Time.deltaTime * 100;
-        /*else */BulletMove();
+        /*else */
+        flyingTime += Time.deltaTime;
+        BulletMove();
 
     }
     private void BulletDestroy() => Destroy(gameObject);
 
     private void BulletMove()
     {
-        if (flyingTime < flytime)
-            this.transform.position += Vector3.up * Time.deltaTime * moveSpeed;
-        else Destroy(gameObject);
+        this.transform.position += Vector3.up * Time.deltaTime * moveSpeed;
+        if (flyingTime > flytime) Destroy(gameObject);
     }
 
     

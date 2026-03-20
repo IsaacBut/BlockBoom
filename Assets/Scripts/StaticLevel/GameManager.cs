@@ -126,6 +126,7 @@ public class GameManager : MonoBehaviour
         uiManager.Init();
         csvReader.Init();
         scoreManager.RankInit();
+        //scoreManager.ResetRank();
         isGameStart = true;
         canSceneUpdate = true;
     }

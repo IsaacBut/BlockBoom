@@ -41,10 +41,10 @@ public class ScoreManager : MonoBehaviour
     {
         // ランクデータを保存する JSON ファイルのフルパスを生成
         rankPath = Path.Combine(Application.persistentDataPath, "BlockBoom_Rank.json");
-
         // JSON ファイルが存在するかどうかを確認
         if (File.Exists(rankPath))
         {
+            //ResetRank();
             LoadRank();     // 既存データがある → 読み込む
         }
         else　　// データがない → 新規 RankList を作成し、初期保存する

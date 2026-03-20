@@ -1,0 +1,12 @@
+# ninja log v5
+84	380	7912866959000000	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	4fed355896f9dfd5
+382	1695	7912866968900000	E:/Git/BlockBoom/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/1p1g5h73/obj/arm64-v8a/libswappywrapper.so	ed972b6811baa072
+26	4635	7912866958400000	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	8016215c2e3b7a03
+10	4714	7912866958100000	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	f3546a61ae5f73d4
+71	4717	7912866958900000	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	192ad26c903e6b77
+46	4719	7912866958600000	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	cc23a68fad4dcd8e
+18	4721	7912866958300000	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	a9d0dd7daafab61b
+35	4933	7912866958500000	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	2a16ddd0b7d402d1
+59	5006	7912866958800000	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	7bd8b2db6725d560
+2	5147	7912866958100000	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	66ae3971d5815b98
+5147	5923	7912867016800000	E:/Git/BlockBoom/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/1p1g5h73/obj/arm64-v8a/libgame.so	cef510f9acd32db

@@ -37,7 +37,7 @@ public class WallBoom : MonoBehaviour
 
         for (int d = 0; d < directions.Length - 1; d++) //Didnt Check Down In First Loop
         {
-            RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, directions[d], blockSize / 2, targetLayer);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, directions[d], blockSize*0.75f, targetLayer);
 
             for (int j = 0; j < hits.Length; j++)
             {
@@ -69,7 +69,7 @@ public class WallBoom : MonoBehaviour
             {
                 for (int d = 0; d < directions.Length; d++)
                 {
-                    RaycastHit2D[] hits = Physics2D.RaycastAll(connectedWall.transform.position, directions[d], blockSize / 2, targetLayer);
+                    RaycastHit2D[] hits = Physics2D.RaycastAll(connectedWall.transform.position, directions[d], blockSize * 0.75f, targetLayer);
                     foreach (RaycastHit2D detectedWall in hits)
                     {
                         Wall wall = detectedWall.collider.GetComponent<Wall>();
@@ -122,7 +122,7 @@ public class WallBoom : MonoBehaviour
                 }
 
             }
-            yield return new WaitForSeconds(InGame.Instance.wallBoomSpreadSpeed);
+            yield return new WaitForSeconds(InGame.Instance.wallBoomSpreadSpeed/3.25f);
             //Debug.Log($"销毁第 {kvp.Key} 层，共 {kvp.Value.Count} 个墙");
         }
 
