@@ -6,7 +6,7 @@ using UnityEngine;
 public class BoomFlame : MonoBehaviour
 {
     public LayerMask blockLayer;
-    private float maxRadius = 35;
+    private float maxRadius = 32;
 
     private float distance;
     private float speed;
@@ -76,11 +76,11 @@ public class BoomFlame : MonoBehaviour
 
             if (InGame.Instance.wallGameObjectList.Count != wallNumber)
             {
-                //FindFlameCanBrakeBlock();
+                FindFlameCanBrakeBlock();
                 wallNumber = InGame.Instance.wallGameObjectList.Count;
             }
 
-            currentLength += distance * speed * Time.deltaTime;
+            currentLength += distance * speed * Time.deltaTime * 7.5f;
 
             foreach (var bone in flameBones)
             {
@@ -117,7 +117,7 @@ public class BoomFlame : MonoBehaviour
             foreach (var hit in hits)
             {
                 if (hit.collider == null) continue;
-                if (hit.collider.CompareTag("Wall"))
+                if (hit.collider.CompareTag("Wall")|| hit.collider.CompareTag("WallBoom"))
                 {
                     wallDistance = hit.distance * 2;
                     break;

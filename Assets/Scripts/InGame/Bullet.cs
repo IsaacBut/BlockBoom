@@ -18,6 +18,7 @@ public class Bullet : MonoBehaviour
         cd = this.GetComponent<Collider2D>();
         boundsX = cd.bounds.extents.x;
         boundsY = cd.bounds.extents.y;
+        InGame.Instance.bulletList.Add(this);
     }
 
     private void Update()

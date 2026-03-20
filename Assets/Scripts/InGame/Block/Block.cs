@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Block : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class Block : MonoBehaviour
     {
         if (canSourePlus)
         {
-            //Manager.instance.ScorePlus();
+            InGame.Instance.ScorePlus();
             Debug.Log("Plus");
         }
 

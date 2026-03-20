@@ -1,14 +1,13 @@
-using System.Security.Cryptography;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEngine.XR;
+
 public class InGame : MonoBehaviour
 {
     public static InGame Instance;
     private GameManager gameManager => GameManager.Instance;
+    private ScoreManager scoreManager => ScoreManager.Instance;
     public bool isGameStart;
 
     [Header("Texting")]
@@ -23,29 +22,58 @@ public class InGame : MonoBehaviour
 
     public bool isGamePause = false;
 
-    //private void Timer()
-    //{
-    //    double now = AudioSettings.dspTime;
 
-    //    while (now >= nextBeatTime)
-    //    {
-    //        nextBeatTime += moveTime;
-    //    }
-
-    //    while (now >= playerShootTimer)
-    //    {
-    //        player.canShoot = true;
-    //        playerShootTimer += playerShootCd;
-    //    }
-
-    //}
-
+    #region Timer
     private void Timer()
     {
         nowTime = AudioSettings.dspTime;
         deltaTime = nowTime - oldTime;
     }
 
+    public float timerLimt = 90.0f;
+    private float nowTimer;
+    private void PlayweTimer()
+    {
+        beat.text = nowBeat.ToString("D2");
+        if (nowTimer < 0 || isGamePause) return;
+        nowTimer -= (float)deltaTime;
+
+        int min = (int)nowTimer / 60;   // 1
+        int sec = (int)nowTimer % 60;   // 30
+
+        timer.text = $"{min.ToString("D2")} : {sec.ToString("D2")}";
+    }
+
+    private int nowBeat;
+    private int beatPenlo = 0;
+
+
+    public bool CheckOnBeat(Vector3 target)
+    {
+        float posX = target.x;
+
+        for(int i = 1; i < points.Count-1; i++)
+        {
+            if (Mathf.Abs(points[i].x - posX) < 0.1) return true;
+        }
+        return false;
+    }
+
+    public void PlusBeat()
+    {
+        if(nowBeat<25) nowBeat++; beatPenlo = 0;
+    }
+    public void ReduceBeat()
+    {
+        beatPenlo++;
+        if (beatPenlo != 3) return;
+        if (nowBeat > 0) nowBeat--;
+        beatPenlo = 0;
+    }
+    
+
+
+    #endregion
 
     #region UI
     [Header("UI")]
@@ -67,6 +95,9 @@ public class InGame : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nowScoreIndex;
     private RectTransform nowScoreIndexRT;
     [SerializeField] private RectTransform pause;
+
+    public TextMeshProUGUI timer;
+    public TextMeshProUGUI beat;
 
 
     private UI ui => UIManager.Instance.ui;
@@ -107,9 +138,15 @@ public class InGame : MonoBehaviour
 
         buttleImage.sizeDelta = ui.buttleImageArea;
         buttleIndexRT.sizeDelta = ui.buttleIndexArea;
+        buttleIndex.fontSize = buttleIndexRT.sizeDelta.y;
+
         bestScoreImage.sizeDelta = ui.bestScoreImageArea;
+        
         bestScoreIndexRT.sizeDelta = ui.bestScoreIndexArea;
+        bestScoreIndex.fontSize = bestScoreIndexRT.sizeDelta.y;
+
         nowScoreIndexRT.sizeDelta = ui.nowScoreIndexArea;
+        nowScoreIndex.fontSize = nowScoreIndexRT.sizeDelta.y;
         pause.sizeDelta = ui.pauseArea;
 
         buttleImage.localPosition = ui.buttleImagePos;
@@ -118,10 +155,21 @@ public class InGame : MonoBehaviour
         bestScoreIndexRT.localPosition = ui.bestScoreIndexPos;
         nowScoreIndexRT.localPosition = ui.nowScoreIndexPos;
 
+        RectTransform timerRT = timer.GetComponent<RectTransform>(); 
+        RectTransform beatRT = beat.GetComponent<RectTransform>();
+
+        timerRT.sizeDelta =ui.timerArea; 
+        beatRT.sizeDelta = ui.beatArea;
+
+        timerRT.localPosition =ui.timerPos;
+        beatRT.localPosition = ui.beatPos;
+
+
         pause.localPosition = ui.pausePos;
 
     }
     #endregion
+
     #region Audio
     [Header("Audio")]
     public string musicCripPath;
@@ -136,29 +184,89 @@ public class InGame : MonoBehaviour
     private void StopMusic() => audioManager.PauseMusic(musicCripName);
     #endregion
 
+    #region Score
+    [Header("Score")]
+    public TextMeshProUGUI thisStageNowScoreText;
+    public TextMeshProUGUI thisStageBestScoreText;
+
+    [SerializeField] private const int scorePlusIndex = 100;
+    [SerializeField] private int thisStageNowScore = 0;
+    [SerializeField] private int thisStageBestScore;
+
+    private Coroutine scoreRoutine;
+    private int minStep = 5;
+    private int maxStep = 50;
+    private int targetScore;
+
+
+    private void ScoreInit()
+    {
+        thisStageBestScore = scoreManager.GetRank(gameManager.nowLevel, gameManager.nowStage);
+    }
+
+    private void ScoreUpdate()
+    {
+        thisStageBestScoreText.text = thisStageBestScore.ToString("D5");
+        thisStageNowScoreText.text = thisStageNowScore.ToString("D5");
+
+    }
+
+    public void ScorePlus()
+    {
+        targetScore += scorePlusIndex;
+    }
+
+    private IEnumerator ScorePlusRoutine()
+    {
+        if (thisStageNowScore >= targetScore) yield break;
+        while (thisStageNowScore < targetScore)
+        {
+            int diff = targetScore - thisStageNowScore;
+
+            int step = Mathf.Clamp(
+                diff / 5,      
+                minStep,
+                maxStep
+            );
+
+            thisStageNowScore += step;
+            yield return null;
+        }
+
+        thisStageNowScore = targetScore;
+        scoreRoutine = null;
+    }
+
+
+    #endregion
+
     #region Pause 
     [Header("Pause")]
 
     public GameObject PauseCanvas;
-
+    public GameObject TutorialCanvas;
     private void PauseInit()
     {
         PauseCanvas.SetActive(false);
+        TutorialCanvas.SetActive(false);
     }
 
     public void Button_Pause()
     {
         isGamePause = !isGamePause;
-
         if (isGamePause)
         {
             PauseCanvas.SetActive(true);
             StopMusic();
+            Time.timeScale = 0.0f;
+
         }
         else
         {
             PauseCanvas.SetActive(false);
             PlayMusic();
+            Time.timeScale = 1.0f;
+
         }
     }
     public void Button_Retry()
@@ -174,8 +282,12 @@ public class InGame : MonoBehaviour
         gameManager.ScenesChange(GameManager.Scenes.GameTitle);
     }
 
-    #endregion
+    public void Button_BackToTutorial()
+    {
+        TutorialCanvas.SetActive(false);
+    }
 
+    #endregion
 
     #region PlayGround
     [Header("PlayGround")]
@@ -184,6 +296,7 @@ public class InGame : MonoBehaviour
     [SerializeField] private List<Boom> boomGameObjectList = new List<Boom>();
     public List<Wall> wallGameObjectList = new List<Wall>();
     [SerializeField] private List<GameObject> normalBlock = new List<GameObject>();
+    [SerializeField] private List<WallBoom> wallBooms = new List<WallBoom>();
 
     [SerializeField] private int rowNumber;
     [SerializeField] private int colNumber;
@@ -191,10 +304,9 @@ public class InGame : MonoBehaviour
     public float blockSize;
     private float blockSizeY;
 
-
     private string levelStageCsv;
     private bool isBlockSetUp = false;
-    public float wallBoomSpreadSpeed = 0.25f;
+    public float wallBoomSpreadSpeed = 0.01f;
     public float flameLenght;
 
     private int BlockSizeRedia()
@@ -331,9 +443,9 @@ public class InGame : MonoBehaviour
                     }
                     else if (targetCode == "WB")
                     {
-                        //WallBoom targetWallBoom = target.GetComponent<WallBoom>();
-                        //wallBoomGameObjectList.Add(targetWallBoom);
-                        //canBrakeGameObject.Add(target);
+                        WallBoom targetWallBoom = target.GetComponent<WallBoom>();
+                        normalBlock.Add(target);
+                        wallBooms.Add(targetWallBoom);
                         target.name = $"X={x - 4},Y={y - 4}, Wall";
                     }
 
@@ -345,13 +457,24 @@ public class InGame : MonoBehaviour
 
         }
 
+
+
         isBlockSetUp = true;
 
     }
+
+    private void BlockListUpdate()
+    {
+        boomGameObjectList.RemoveAll(item => item == null);
+        normalBlock.RemoveAll(item => item == null);
+        wallGameObjectList.RemoveAll(item => item == null);
+    }
+
     #endregion
 
     #region Player
     [Header("Player")]
+
     public Player player;
     public float playerPosY;
     public List<Vector3> points;
@@ -359,11 +482,13 @@ public class InGame : MonoBehaviour
     public int playerStartIndex = 0;
 
     private float playerShootCd;
+    public TextMeshProUGUI playerNowBullet;
 
     public float distanceOfBeat;
-    public float moveDistance;
     public double timePerOneBeat;
-    public float moveSpeed;
+    public double beatsPerSecond;
+
+
 
     public bool IsInTail()
     {
@@ -391,21 +516,116 @@ public class InGame : MonoBehaviour
     {
         if (isGamePause) return;
 
-        if (!IsInTail())
-        {
-            float newPosX = (float)(player.transform.position.x + distanceOfBeat * moveSpeed * deltaTime);
+        float newPosX = player.transform.position.x + (float)((distanceOfBeat * beatsPerSecond) * deltaTime);
+        //float newPosX = player.transform.position.x + (float)((distanceOfBeat * timePerOneBeat) * deltaTime);
 
-            player.transform.position = new Vector3(newPosX, playerPosY, -1);
-        }
-        else
+        player.transform.position = new Vector3(newPosX, playerPosY, -1);
+
+        if (IsInTail())
         {
-            player.transform.position = points[0];
+            var extraX = Mathf.Abs(points[points.Count - 1].x - player.transform.position.x);
+            newPosX = points[0].x + extraX;
+            player.transform.position = new Vector3(newPosX, playerPosY, -1);
+
         }
 
     }
 
+
+
+    private double test_StartTime;
+    private float test_BeatOfDistance;
+    private double test_BeatOfTime;
+    private float test_LoopOfDistance;
+    private double test_LoopOfTime;
+
+
+
+    private void Text_Init()
+    {
+        test_BeatOfDistance = distanceOfBeat;
+        test_BeatOfTime = timePerOneBeat;
+        test_LoopOfDistance = test_BeatOfDistance * 8;
+        test_LoopOfTime = test_BeatOfTime * 8;
+    }
+
+    private double test_nowTime;
+    private double test_pauseTime;
+    private double test_totalpauseTime;
+
+
+    private double test_totaDeltaTime;
+    private int test_timeRedio;
+    private double test_deltaTime;
+    private double test_timePerloopTime;
+    private float test_distance;
+
+
+    private void NewPlayMove()
+    {
+        if (isGamePause)
+        {
+
+            test_pauseTime = AudioSettings.dspTime - test_nowTime;
+            return;
+        }
+        test_nowTime = AudioSettings.dspTime;
+        test_totalpauseTime += test_pauseTime;
+        test_totaDeltaTime = nowTime - test_StartTime - test_totalpauseTime;
+
+        test_timeRedio = (int)(test_totaDeltaTime / test_LoopOfTime);
+        test_deltaTime = test_totaDeltaTime - (test_timeRedio * test_LoopOfTime);
+        test_timePerloopTime = test_deltaTime / test_LoopOfTime;
+        test_distance = (float)(test_timePerloopTime * test_LoopOfDistance);
+
+        float newPosX = points[0].x + test_distance;
+        player.transform.position = new Vector3(newPosX, playerPosY, -1);
+
+
+    }
+
+
     #endregion
 
+    #region GameSet
+    public List<Bullet> bulletList = new List<Bullet>();
+    private Coroutine gameSet;
+
+    private bool IsAllBlockGone() => normalBlock.Count == 0;
+
+    private bool IsBulletEmpty() => player.nowbullet == 0 && bulletList.Count == 0;
+    private bool IsTimeUp() => nowTime < 0;
+
+    private bool IsGameSet() => IsAllBlockGone() || IsBulletEmpty()|| IsTimeUp();
+
+    private void GameResult()
+    {
+        if (IsAllBlockGone())
+        {
+            GameManager.Instance.GameClear();
+        }
+        else GameManager.Instance.GameOver();
+    }
+
+    private IEnumerator GameSet()
+    {
+        isGamePause = false;
+        StopMusic();
+        yield return new WaitForSeconds(0.1f);
+
+        GameResult();
+        gameManager.finalScore = thisStageNowScore;
+        scoreManager.AddRank(gameManager.nowLevel, gameManager.nowStage, thisStageNowScore);
+
+        yield return new WaitForSeconds(0.1f);
+        gameManager.ScenesChange(GameManager.Scenes.Release);
+
+
+    }
+
+
+
+    #endregion
 
     private void Awake()
     {
@@ -421,22 +641,25 @@ public class InGame : MonoBehaviour
         rowNumber = (int)csvReader.ReadTargetCellIndex(levelStageCsv, "B", 3);
         colNumber = (int)csvReader.ReadTargetCellIndex(levelStageCsv, "B", 4);
 
-        musicCripPath = csvReader.ReadTargetCellString(levelStageCsv, "B", 14);
-
+        //musicCripPath = csvReader.ReadTargetCellString(levelStageCsv, "B", 14);
+        musicCripPath = "135bpm_game_loop";
 
         player = Player.Instance;
         playerShootCd = csvReader.ReadTargetCellIndex(levelStageCsv, "B", 16);
         player.bulletMax = (int)csvReader.ReadTargetCellIndex(levelStageCsv, "B", 17);
 
+        //timePerOneBeat = bpm / 60.0;
         timePerOneBeat = 60.0 / bpm;
 
-        moveSpeed = (float)(1.0 / timePerOneBeat);
+        beatsPerSecond = (float)(1.0 / timePerOneBeat);
         distanceOfBeat = Mathf.Abs(points[1].x - points[2].x);
-        moveDistance = distanceOfBeat * moveSpeed;
-
-        oldTime = AudioSettings.dspTime;
-
+        Text_Init();
     }
+
+
+
+
+
 
     public IEnumerator Init()
     {
@@ -447,17 +670,27 @@ public class InGame : MonoBehaviour
         GameDataInit();
 
         AudioInit();
+        ScoreInit();
         CaluBlockSize();
-
         BlocksSetUp();
         PauseInit();
+        yield return null;
 
         flameLenght = blockSize * BlockSizeRedia();
         Debug.Log(points[playerStartIndex]);
-        player.transform.position = points[playerStartIndex];
+        player.transform.position = points[0];
         player.Init(playerShootCd);
 
+        foreach (WallBoom wallBoom in wallBooms)
+        {
+            wallBoom.startFind = true;
+            yield return null;
+        }
+
         yield return new WaitUntil(() => audioManager.musicSounds[0].clip != null);
+
+
+
         audioManager.PlayMusic(musicCripName, 100);
         StopMusic();    
         Debug.Log("InGame Init");
@@ -466,19 +699,41 @@ public class InGame : MonoBehaviour
     {
         isGamePause = false;
         PlayMusic();
+        nowTimer = timerLimt;
+        oldTime = AudioSettings.dspTime;
+        test_StartTime = AudioSettings.dspTime;
     }
 
 
     public void InGameUpdate()
     {
         Timer();
+        PlayweTimer();
+        ScoreUpdate();
         player.ShootBullet();
+        playerNowBullet.text = player.nowbullet.ToString("D2");
     }
 
     public void InGameLateUpdate()
     {
-        oldTime = nowTime;
-        PlayerMove();
+        if (!IsGameSet())
+        {
+            NewPlayMove();
+            //PlayerMove();
+            if (scoreRoutine == null) scoreRoutine = StartCoroutine(ScorePlusRoutine());
+            BlockListUpdate();
+            bulletList.RemoveAll(item => item == null);
+
+            oldTime = AudioSettings.dspTime;
+        }
+        else
+        {
+            if(gameSet == null)
+            {
+                gameSet = StartCoroutine(GameSet());
+            }
+        }
+
     }
 
 }

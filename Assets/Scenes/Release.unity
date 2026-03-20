@@ -1024,7 +1024,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1428028751}
         m_TargetAssemblyTypeName: Release, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: Button_NextStage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

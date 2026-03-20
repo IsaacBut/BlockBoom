@@ -195,7 +195,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8659b8f2ed2a8478516535db7aaa7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WallBoom
+  walls: []
   isBoom: 0
+  startFind: 0
 --- !u!61 &3385697647379249676
 BoxCollider2D:
   m_ObjectHideFlags: 0

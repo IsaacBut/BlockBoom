@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
         inGame = InGame.Instance;
     }
 
-#if UNITY_STANDALONE
+#if UNITY_STANDALONE||UNITY_EDITOR
     public void ShootBullet()
     {
         if (!canShoot)
@@ -52,10 +52,13 @@ public class Player : MonoBehaviour
         {
             if (!canShoot) { StartCoroutine(CantShoot()); return; }
 
-            else if(nowbullet > 0)
+            else if(nowbullet > 0 && !InGame.Instance.isGamePause)
             {
                 Instantiate(bulletPrefab, transform.position, Quaternion.identity);
                 StartCoroutine(CanShoot());
+                if (InGame.Instance.CheckOnBeat(transform.position)) InGame.Instance.PlusBeat();
+                else InGame.Instance.ReduceBeat();
+
                 //+GameData.blockSize
                 nowbullet--;
                 canShoot = false;
@@ -73,7 +76,7 @@ public class Player : MonoBehaviour
 
 #endif
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID &&!UNITY_EDITOR
     public void ShootBullet()
     {
         if (!canShoot)
@@ -92,11 +95,10 @@ public class Player : MonoBehaviour
             if (touch.press.wasPressedThisFrame)
             {
                 if (!canShoot) { StartCoroutine(CantShoot()); return; }
-                else if (nowbullet > 0)
+                else if (nowbullet > 0 && !InGame.Instance.isGamePause) 
                 {
                     Instantiate(bulletPrefab, transform.position, Quaternion.identity);
                     StartCoroutine(CanShoot());
-                    //+GameData.blockSize
                     nowbullet--;
                     canShoot = false;
                 }
@@ -131,7 +133,7 @@ public class Player : MonoBehaviour
     Vector3 biggerScale => image.localScale * 1.3f;
     Vector3 smallerScale => image.localScale * 0.9f;
 
-    IEnumerator CanShoot()
+    private IEnumerator CanShoot()
     {
         StartCoroutine(ScaleCoroutine(scale, biggerScale, shootAnaimeTime / 4));
         yield return new WaitForFixedUpdate();
@@ -143,6 +145,7 @@ public class Player : MonoBehaviour
         yield return new WaitForFixedUpdate();
 
     }
+
     public IEnumerator ScaleCoroutine(Vector3 start, Vector3 end, float second)
     {
         float time = 0f;

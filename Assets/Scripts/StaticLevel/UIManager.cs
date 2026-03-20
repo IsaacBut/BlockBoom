@@ -1,6 +1,5 @@
 ﻿using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class UI
 {
@@ -36,6 +35,11 @@ public class UI
     public Vector3 nowScoreIndexPos;
     public Vector3 pausePos;
 
+    public Vector3 timerArea;
+    public Vector3 timerPos;
+
+    public Vector3 beatArea;
+    public Vector3 beatPos;
 }
 
 public class UIManager : MonoBehaviour
@@ -132,20 +136,22 @@ public class UIManager : MonoBehaviour
     private void AreaSizeInit()
     {
 
-        float scaleByWidth = screenSize.x / 24f;
-        float scaleByHeight = screenSize.y / 9;
+        float scaleByWidth = ui.canvasSize.x / 24f;
+        float scaleByHeight = ui.canvasSize.y / 9;
 
-        ui.playerInformArea = new Vector2(screenSize.x, 0.75f * scaleByHeight);
+        ui.playerInformArea = new Vector2(ui.canvasSize.x, 0.75f * scaleByHeight);
         ui.playArea = new Vector2(scaleByWidth * 22, 7f * scaleByHeight);
         ui.lightArea = new Vector2(scaleByWidth * 1f, 7f * scaleByHeight);
-        ui.playerArea = new Vector2(screenSize.x, 1.25f * scaleByHeight);
+        ui.playerArea = new Vector2(ui.canvasSize.x, 1.25f * scaleByHeight);
 
         isAreaSizeInit = true;
     }
     private void AreaPosInit()
     {
-        float canvasHeight = canvasRect.rect.height;
-        float canvasWidth = canvasRect.rect.width;
+        //float canvasHeight = canvasRect.rect.height;
+        //float canvasWidth = canvasRect.rect.width;
+        float canvasHeight = ui.canvasSize.y;
+        float canvasWidth = ui.canvasSize.x;
 
         // 设置 Image 大小
         playInformArea.sizeDelta = ui.playerInformArea;
@@ -195,16 +201,23 @@ public class UIManager : MonoBehaviour
         float dx = Mathf.Abs(canvasCorners[0].x - canvasCorners[2].x);
         float delta = dx / deltaLine;
 
-        ui.moveDelta = new float[deltaLine + 2];
+        ui.moveDelta = new float[deltaLine + 2];//10
+        Debug.Log(ui.moveDelta.Length);
 
-        ui.moveDelta[0] = canvasCorners[0].x - delta / 2;
+        ui.moveDelta[0] = canvasCorners[0].x - delta / 2;//0
 
-        for (int x = 1; x < ui.moveDelta.Length; x++)
+        for (int x = 1; x < ui.moveDelta.Length - 1; x++)//1-8
         {
             ui.moveDelta[x] = ui.moveDelta[0] + x * delta;
+        }
+        ui.moveDelta[0] = ui.moveDelta[1] - delta / 2;//0
+
+        ui.moveDelta[ui.moveDelta.Length - 1] = ui.moveDelta[8] + delta / 2;
+
+        for (int x = 0; x< ui.moveDelta.Length; x++)
+        {
             Debug.Log(ui.moveDelta[x]);
         }
-
 
         isPlayerAreaInit = true;
     }
@@ -257,12 +270,24 @@ public class UIManager : MonoBehaviour
         float posY = -ui.playerInformArea.y / 2;
         float posZ = ui.playInformAreaPos.z;
 
-        ui.buttleImageArea = new Vector2(areaOffsetX, areaY);
-        ui.buttleIndexArea = new Vector2(areaOffsetX, areaY);
-        ui.bestScoreImageArea = new Vector2(areaOffsetX * 3, areaY);
-        ui.bestScoreIndexArea = new Vector2(areaOffsetX * 3, areaY);
-        ui.nowScoreIndexArea = new Vector2(areaOffsetX * 3, areaY);
-        ui.pauseArea = new Vector2(screenSize.x / 6, areaY);
+
+        //ui.buttleImageArea = new Vector2(areaOffsetX , areaY );
+        //ui.buttleIndexArea = new Vector2(areaOffsetX , areaY );
+        //ui.bestScoreImageArea = new Vector2(areaOffsetX * 3 , areaY );
+        //ui.bestScoreIndexArea = new Vector2(areaOffsetX * 3 , areaY / 2);
+        //ui.nowScoreIndexArea = new Vector2(areaOffsetX * 3 , areaY );
+        //ui.pauseArea = new Vector2(screenSize.x / 6 , areaY );
+
+        ui.buttleImageArea = new Vector2(areaOffsetX/2, areaY/2);
+        ui.buttleIndexArea = new Vector2(areaOffsetX/2, areaY/2);
+        ui.bestScoreImageArea = new Vector2(areaOffsetX * 3/2, areaY/2);
+        ui.bestScoreIndexArea = new Vector2(areaOffsetX * 3/2, areaY/2);
+        ui.nowScoreIndexArea = new Vector2(areaOffsetX * 3/2, areaY/2);
+        ui.pauseArea = new Vector2(screenSize.x / 6/2, areaY/2);
+
+        ui.timerArea = new Vector2(areaOffsetX*1.5f, areaY / 2);
+        ui.beatArea = ui.buttleIndexArea;
+
 
         buttleImage.sizeDelta = ui.buttleImageArea;
         buttleIndex.sizeDelta = ui.buttleIndexArea;
@@ -273,11 +298,20 @@ public class UIManager : MonoBehaviour
 
         ui.buttleImagePos = new Vector3(-(screenSize.x / 2) + (ui.buttleImageArea.x / 2), posY, posZ);
         ui.buttleIndexPos = new Vector3(ui.buttleImagePos.x + ui.buttleIndexArea.x, posY, posZ);
-        ui.bestScoreImagePos = new Vector3(-ui.bestScoreImageArea.x, posY, posZ);
-        ui.bestScoreIndexPos = new Vector3(0, posY, posZ);
+        //ui.bestScoreImagePos = new Vector3(-ui.bestScoreImageArea.x, posY, posZ);
+        //ui.bestScoreIndexPos = new Vector3(0, posY, posZ);
         ui.pausePos = new Vector3((screenSize.x / 2) - (ui.pauseArea.x / 2), posY, posZ);
         float nowScoreIndexPosX = ui.pausePos.x - (ui.pauseArea.x / 2) - (ui.nowScoreIndexArea.x / 2);
         ui.nowScoreIndexPos = new Vector3(nowScoreIndexPosX, posY, posZ);
+        float bestScoreIndexPosX = ui.nowScoreIndexPos.x - (ui.nowScoreIndexPos.x / 2) - (ui.bestScoreIndexArea.x / 2);
+        ui.bestScoreIndexPos = new Vector3(bestScoreIndexPosX, posY, posZ);
+        ui.bestScoreImagePos = new Vector3(ui.bestScoreIndexPos.x - ui.bestScoreImageArea.x, posY, posZ);
+
+        ui.timerPos = new Vector3(ui.buttleIndexPos.x + areaOffsetX + ui.timerArea.x, posY, posZ);
+        ui.beatPos = new Vector3(ui.timerPos.x + areaOffsetX + ui.beatArea.x, posY, posZ);
+
+
+
 
         buttleImage.localPosition = ui.buttleImagePos;
         buttleIndex.localPosition = ui.buttleIndexPos;

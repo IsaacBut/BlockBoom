@@ -18,14 +18,17 @@ public class Boom : MonoBehaviour
         Vector3 startPoint = new Vector3(this.transform.position.x, this.transform.position.y, -0.11f);
         GameObject flamePrefab = Instantiate(flame, startPoint, Quaternion.identity);
 
-        flamePrefab.GetComponent<BoomFlame>().FlameInit(InGame.Instance.distanceOfBeat, InGame.Instance.moveSpeed);
+        flamePrefab.GetComponent<BoomFlame>().FlameInit(InGame.Instance.distanceOfBeat, (float)InGame.Instance.beatsPerSecond);
 
         Destroy(this.gameObject);
     }
 
     private void Update()
     {
+#if UNITY_EDITOR
         if (isBoom) GoDestroy();
+#endif
+
     }
 
 }
